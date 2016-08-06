@@ -73,7 +73,7 @@ bool Line2D::Contains(const Point2D& point) const
 	return this->Sign(point) == 0;
 }
 
-Point2D Line2D::Intersect(const Line2D& second_line) const
+Point2D Line2D::GetIntersection(const Line2D& second_line) const
 {
 	double cross_prod_norms = Vector2D(this->A, this->B).OrientedCCW(Vector2D(second_line.A, second_line.B));
 	Point2D intersect_point;
@@ -95,10 +95,10 @@ Point2D Line2D::Intersect(const Line2D& second_line) const
 	return intersect_point;
 }
 
-Point2D Line2D::Intersect(const Segment2D& segment) const
+Point2D Line2D::GetIntersection(const Segment2D& segment) const
 {
 	Line2D second_line(segment);
-	Point2D intersect_point = this->Intersect(second_line);
+	Point2D intersect_point = this->GetIntersection(second_line);
 
 	if (intersect_point == Point2D(-INF, -INF))
 	{
@@ -112,10 +112,10 @@ Point2D Line2D::Intersect(const Segment2D& segment) const
 	return intersect_point;
 }
 
-Point2D Line2D::Intersect(const Ray2D& ray) const
+Point2D Line2D::GetIntersection(const Ray2D& ray) const
 {
 	Line2D second_line(ray);
-	Point2D intersect_point = this->Intersect(second_line);
+	Point2D intersect_point = this->GetIntersection(second_line);
 
 	if (intersect_point == Point2D(-INF, -INF))
 	{
@@ -127,6 +127,21 @@ Point2D Line2D::Intersect(const Ray2D& ray) const
 	}
 
 	return intersect_point;
+}
+
+bool Line2D::HasIntersection(const Line2D& second_line) const
+{
+	return this->GetIntersection(second_line) != Point2D(INF, INF);
+}
+
+bool Line2D::HasIntersection(const Segment2D& segment) const
+{
+	return this->GetIntersection(segment) != Point2D(INF, INF);
+}
+
+bool Line2D::HasIntersection(const Ray2D& ray) const
+{
+	return this->GetIntersection(ray) != Point2D(INF, INF);
 }
 
 

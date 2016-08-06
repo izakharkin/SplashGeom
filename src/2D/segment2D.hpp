@@ -50,14 +50,14 @@ public:
 	// ?return: returns Point2D(INF, INF) if there is no intersection,
 	//          if one segment intersects another not only with one point, returns some point of their 'intersection segment',
 	//          else return point of their intersection
-	Point2D Intersect(const Segment2D& second_seg) const;
+	Point2D GetIntersection(const Segment2D& second_seg) const;
 	// Intersection of line and segment
 	// ?params: segment - the segment with which we find intersection
 	// ?return: returns Point2D(INF, INF) if there is no intersection,
 	//          if this line contains segment, returns first point of segment,
 	//          else returns point of their intersection (in 2D)
 	// ?complexity: O(1)
-	Point2D Intersect(const Line2D& line) const;
+	Point2D GetIntersection(const Line2D& line) const;
 	// Intersection of segment and ray
 	// ?params: ray - the ray with which we find intersection
 	// ?return: returns Point2D(INF, INF) if there is no intersection,
@@ -65,7 +65,11 @@ public:
 	//          if this segment contains pos_ of ray, returns pos_ of ray,
 	//          else returns point of their intersection (in 2D)
 	// ?complexity: O(1)
-	Point2D Intersect(const Ray2D& ray) const;
+	Point2D GetIntersection(const Ray2D& ray) const;
+
+	bool HasIntersection(const Segment2D& second_seg) const;
+	bool HasIntersection(const Line2D& line) const;
+	bool HasIntersection(const Ray2D& ray) const;
 };
 
 #endif /*SEGMENT_HPP_*/

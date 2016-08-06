@@ -55,12 +55,12 @@ bool Circle::Contains(const Point2D& point) const
 	return this->center_.l2_distance(point) <= little_haxis_;
 }
 
-bool Circle::Boundary(const Point2D&) const
+bool Circle::Boundary(const Point2D& point) const
 {
-
+	return this->center_.l2_distance(point) == little_haxis_;
 }
 
-bool Circle::Intersect(const Segment2D&, Point2D&, Point2D&) const
+bool Circle::Intersect(const Line2D& line, Point2D& intersect_1, Point2D& intersect_2) const
 {
-
+	return 0;
 }

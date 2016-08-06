@@ -20,16 +20,16 @@
 #include "vector3D.hpp"
 
 Vector3D::Vector3D()
-: x1(), x2() {}
+	: x1(), x2() {}
 
-Vector3D::Vector3D(double _x1, double _x2)
-: x1(_x1), x2(_x2) {}
+Vector3D::Vector3D(double _x1, double _x2, double _x3)
+	: x1(_x1), x2(_x2), x3(_x3) {}
 
 Vector3D::Vector3D(const Point3D& point_to)
-: x1(point_to.x), x2(point_to.y), x3(point_to.z) {}
+	: x1(point_to.x), x2(point_to.y), x3(point_to.z) {}
 
 Vector3D::Vector3D(const Point3D& point_from, const Point3D& point_to)
-: x1(point_to.x - point_from.x), x2(point_to.y - point_from.y), x3(point_to.z - point_from.z) {}
+	: x1(point_to.x - point_from.x), x2(point_to.y - point_from.y), x3(point_to.z - point_from.z) {}
 
 double Vector3D::Dot(const Vector3D& second_vec) const
 {

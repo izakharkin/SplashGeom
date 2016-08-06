@@ -58,10 +58,10 @@ bool Ray2D::Contains(const Point2D& point) const
 	return (dot_product >= EPS && Line2D(*this).Contains(point));
 }
 
-Point2D Ray2D::Intersect(const Line2D& second_line) const
+Point2D Ray2D::GetIntersection(const Line2D& second_line) const
 {
 	Line2D this_line(*this);
-	Point2D intersect_point = this_line.Intersect(second_line);
+	Point2D intersect_point = this_line.GetIntersection(second_line);
 	
 	if (intersect_point != Point2D(-INF, -INF))
 	{
@@ -75,11 +75,11 @@ Point2D Ray2D::Intersect(const Line2D& second_line) const
 	return intersect_point;
 }
 
-Point2D Ray2D::Intersect(const Ray2D& second_ray) const
+Point2D Ray2D::GetIntersection(const Ray2D& second_ray) const
 {
 	Line2D this_line(*this);
 	Line2D second_line(second_ray);
-	Point2D intersect_point = this_line.Intersect(second_line);
+	Point2D intersect_point = this_line.GetIntersection(second_line);
 
 	if (intersect_point == Point2D(-INF, -INF))
 	{
@@ -103,11 +103,11 @@ Point2D Ray2D::Intersect(const Ray2D& second_ray) const
 	return intersect_point;
 }
 
-Point2D Ray2D::Intersect(const Segment2D& segment) const
+Point2D Ray2D::GetIntersection(const Segment2D& segment) const
 {
 	Line2D this_line(*this);
 	Line2D second_line(segment);
-	Point2D intersect_point = this_line.Intersect(second_line);
+	Point2D intersect_point = this_line.GetIntersection(second_line);
 
 	if (intersect_point == Point2D(-INF, -INF))
 	{
@@ -129,4 +129,19 @@ Point2D Ray2D::Intersect(const Segment2D& segment) const
 	}
 
 	return intersect_point;
+}
+
+bool Ray2D::HasIntersection(const Line2D& line) const
+{
+	return line.HasIntersection(*this);
+}
+
+bool Ray2D::HasIntersection(const Ray2D& second_ray) const
+{
+	return this->GetIntersection(second_ray) != Point2D(INF, INF);
+}
+
+bool Ray2D::HasIntersection(const Segment2D& segment) const
+{
+	return this->GetIntersection(segment) != Point2D(INF, INF);
 }

@@ -37,7 +37,7 @@ public:
 	void operator =(const vector<Point2D>& points);
 
 	double Area() const;
-	bool Contains(const Point2D&) const;
+	bool Contains(const Point2D& point) const;
 	bool Boundary(const Point2D&) const;
 	bool Intersect(const Segment2D&, Point2D&, Point2D&) const;
 protected:

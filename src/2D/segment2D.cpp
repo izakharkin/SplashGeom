@@ -61,12 +61,12 @@ bool Segment2D::Contains(const Point2D& point) const
 	return this->Point2DInBox(point) && cur_line.Contains(point);
 }
 
-Point2D Segment2D::Intersect(const Segment2D& second_seg) const
+Point2D Segment2D::GetIntersection(const Segment2D& second_seg) const
 {
 	Line2D first_line(*this);
 	Line2D second_line(second_seg);
 	
-	Point2D intersect_point = first_line.Intersect(second_line);
+	Point2D intersect_point = first_line.GetIntersection(second_line);
 
 	if (intersect_point == Point2D(-INF, -INF))
 	{
@@ -90,12 +90,27 @@ Point2D Segment2D::Intersect(const Segment2D& second_seg) const
 	return intersect_point;
 }
 
-Point2D Segment2D::Intersect(const Line2D& line) const
+Point2D Segment2D::GetIntersection(const Line2D& line) const
 {
-	return line.Intersect(*this);
+	return line.GetIntersection(*this);
 }
 
-Point2D Segment2D::Intersect(const Ray2D& ray) const
+Point2D Segment2D::GetIntersection(const Ray2D& ray) const
 {
-	return ray.Intersect(*this);
+	return ray.GetIntersection(*this);
+}
+
+bool Segment2D::HasIntersection(const Segment2D& second_seg) const
+{
+	return this->GetIntersection(second_seg) != Point2D(INF, INF);
+}
+
+bool Segment2D::HasIntersection(const Line2D& line) const
+{
+	return line.HasIntersection(*this);
+}
+
+bool Segment2D::HasIntersection(const Ray2D& ray) const
+{
+	return ray.HasIntersection(*this);
 }

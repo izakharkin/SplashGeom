@@ -39,7 +39,6 @@ void Polygon::operator = (const vector<Point2D>& points)
 	//std::copy(points.begin(), points.end(), vertices_.begin());
 }
 
-
 double Polygon::Area() const
 {
 	double area = 0;
@@ -56,15 +55,49 @@ double Polygon::Area() const
 
 bool Polygon::Contains(const Point2D& point) const
 {
-	return 0;
+	int num_of_cross_sides = 0;
+	size_t sz = vertices_.size();
+	Ray2D checking_ray(point, Vector2D(1, 0));
+
+	bool is_on_border = false;
+	for (size_t i = 0; i < sz && !is_on_border; ++i)
+	{
+		int j = (i + 1) % sz;
+		Segment2D cur_side(vertices_[i], vertices_[j]);
+		if (cur_side.Contains(point))
+		{
+			is_on_border = true;
+			num_of_cross_sides = 1;
+		}
+		else if (checking_ray.HasIntersection(cur_side))
+		{
+			num_of_cross_sides++;
+		}
+	}
+
+	return num_of_cross_sides % 2;
 }
 
-bool Polygon::Boundary(const Point2D & p) const
+bool Polygon::Boundary(const Point2D & point) const
 {
-	return 0;
+	size_t sz = vertices_.size();
+	bool is_on_border = false;
+
+	for (size_t i = 0; i < sz && !is_on_border; ++i)
+	{
+		int j = (i + 1) % sz;
+		Segment2D cur_side(vertices_[i], vertices_[j]);
+		if (cur_side.Contains(point))
+		{
+			is_on_border = true;
+		}
+	}
+
+	return is_on_border;
 }
 
 bool Polygon::Intersect(const Segment2D& seg, Point2D& p1, Point2D& p2) const
 {
 	return 0;
 }
+

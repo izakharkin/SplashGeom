@@ -33,7 +33,7 @@ public:
 	double x3;
 
 	Vector3D();
-	Vector3D(double _x1, double _x2);
+	Vector3D(double _x1, double _x2, double _x3);
 	Vector3D(const Point3D& point_to);
 	Vector3D(const Point3D& point_from, const Point3D& point_to);
 
