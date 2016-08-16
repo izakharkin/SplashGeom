@@ -1,4 +1,4 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra
+// Splash (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
@@ -9,16 +9,16 @@
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Foobar is distributed in the hope that it will be useful,
+	Splash is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+	along with Splash.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef RECTANGLE_HPP_
-#define RECTANGLE_HPP_
+#ifndef VORONOI2D_HPP_
+#define VORONOI2D_HPP_
 
 #include "splash_forward.hpp"
 #include "splash_utils.hpp"
@@ -29,19 +29,27 @@
 #include "segment2D.hpp"
 #include "polygon.hpp"
 #include "convex2D.hpp"
+#include "rectangle.hpp"
 
-class Rectangle : public Convex2D
+class Voronoi2DLocus
 {
 public:
-	Rectangle();
-	Rectangle(const vector<Point2D>& points);
-
-	double Area() const;
-	bool Contains(const Point2D&) const;
-	bool Boundary(const Point2D&) const;
-	bool Intersect(const Segment2D&, Point2D&, Point2D&) const;
-
-	Convex2D GetIntersectionalConvex2D(const Point2D& cur_point, const Line2D& halfplane) const;
+	Convex2D GetRegion() const;
+private:
+	Convex2D region;
 };
 
-#endif /*RECTANGLE_HPP_*/
+class VoronoiDiagram2D
+{
+public:
+	VoronoiDiagram2D();
+	VoronoiDiagram2D(const vector<Point2D>& points);
+
+	vector<Voronoi2DLocus> MakeVoronoiDiagram2DHalfPlanes(const vector<Point2D>& points, const Rectangle& border_box);
+private:
+	vector<Voronoi2DLocus> diagram;
+
+	Voronoi2DLocus MakeVoronoi2DLocus(const Point2D& cur_point, const vector<Point2D>& points, const Rectangle& border_box);
+};
+
+#endif /*VORONOI2D_HPP_*/

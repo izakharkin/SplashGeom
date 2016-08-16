@@ -9,19 +9,20 @@
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Foobar is distributed in the hope that it will be useful,
+	Splash is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+	along with Splash.  If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef CONVEX2D_HPP_
 #define CONVEX2D_HPP_
 
 #include "splash_forward.hpp"
 #include "splash_utils.hpp"
+
 #include "point2D.hpp"
 #include "vector2D.hpp"
 #include "line2D.hpp"
@@ -34,13 +35,28 @@ public:
 	Convex2D();
 	Convex2D(int n);
 	Convex2D(const vector<Point2D>& points);
+	// copying  = delete
+	Convex2D(const Convex2D& second_polygon) = delete;
+	void operator =(const Convex2D& second_polygon) = delete;
+	// moving
+	Convex2D(Convex2D&& second_polygon);
+	void operator =(Convex2D&& second_polygon);
 
-	void makeConvexHull(const vector<Point2D>& points);
+	int Size() const;
+
+	Point2D next(int i) const;
+	Point2D prev(int i) const;
+
+	Convex2D MakeConvexHullGrehem(const vector<Point2D>& points);
+	Convex2D MakeConvexHullJarvis(const vector<Point2D>& points);
 
 	double Area() const;
 	bool Contains(const Point2D&) const;
 	bool Boundary(const Point2D&) const;
 	bool Intersect(const Segment2D&, Point2D&, Point2D&) const;
+
+	vector<Point2D> GetIntersection(const Segment2D& segment) const;
+	Convex2D GetIntersectionalConvex(const Polygon& second_polygon) const;
 };
 
 #endif /*CONVEX2D_HPP_*/

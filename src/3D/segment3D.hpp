@@ -23,54 +23,54 @@
 #include "splash_forward.hpp"
 #include "splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "vector2D.hpp"
-#include "line2D.hpp"
+#include "point3D.hpp"
+#include "vector3D.hpp"
+#include "line3D.hpp"
 
-class Segment2D
+class Segment3D
 {
 public:
-	Point2D a;
-	Point2D b;
+	Point3D a;
+	Point3D b;
 
-	Segment2D();
-	Segment2D(const Point2D& point_a, const Point2D& point_b);
-	
+	Segment3D();
+	Segment3D(const Point3D& point_a, const Point3D& point_b);
+
 	void Reverse();
 
 	double Length() const;
-	Point2D GetCenter() const;
-	bool Point2DInBox(const Point2D& point) const;
+	Point3D Center() const;
+	bool Point3DInBox(const Point3D& point) const;
 
-	Vector2D Direction() const;
-	Vector2D NormalVec() const;
+	Vector3D Direction() const;
+	Vector3D NormalVec() const;
 
-	bool Contains(const Point2D& point) const;
+	bool Contains(const Point3D& point) const;
 	// Intersection of two segments
 	// ?params: second_seg - the segment with which we find intersection
-	// ?return: returns Point2D(INF, INF) if there is no intersection,
+	// ?return: returns Point3D(INF, INF) if there is no intersection,
 	//          if one segment intersects another not only with one point, returns some point of their 'intersection segment',
 	//          else return point of their intersection
-	Point2D GetIntersection(const Segment2D& second_seg) const;
+	Point3D GetIntersection(const Segment3D& second_seg) const;
 	// Intersection of line and segment
 	// ?params: segment - the segment with which we find intersection
-	// ?return: returns Point2D(INF, INF) if there is no intersection,
+	// ?return: returns Point3D(INF, INF) if there is no intersection,
 	//          if this line contains segment, returns first point of segment,
-	//          else returns point of their intersection (in 2D)
+	//          else returns point of their intersection (in 3D)
 	// ?complexity: O(1)
-	Point2D GetIntersection(const Line2D& line) const;
+	Point3D GetIntersection(const Line3D& line) const;
 	// Intersection of segment and ray
 	// ?params: ray - the ray with which we find intersection
-	// ?return: returns Point2D(INF, INF) if there is no intersection,
+	// ?return: returns Point3D(INF, INF) if there is no intersection,
 	//          if ray contains this segment, returns first point of segment,
 	//          if this segment contains pos_ of ray, returns pos_ of ray,
-	//          else returns point of their intersection (in 2D)
+	//          else returns point of their intersection (in 3D)
 	// ?complexity: O(1)
-	Point2D GetIntersection(const Ray2D& ray) const;
+	Point3D GetIntersection(const Ray3D& ray) const;
 
-	bool HasIntersection(const Segment2D& second_seg) const;
-	bool HasIntersection(const Line2D& line) const;
-	bool HasIntersection(const Ray2D& ray) const;
+	bool HasIntersection(const Segment3D& second_seg) const;
+	bool HasIntersection(const Line3D& line) const;
+	bool HasIntersection(const Ray3D& ray) const;
 };
 
 #endif /*SEGMENT_HPP_*/

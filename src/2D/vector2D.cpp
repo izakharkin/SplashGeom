@@ -31,7 +31,7 @@ Vector2D::Vector2D(const Point2D& point_to)
 Vector2D::Vector2D(const Point2D& point_from, const Point2D& point_to)
 	: x1(point_to.x - point_from.x), x2(point_to.y - point_from.y) {}
 
-double Vector2D::Dot(const Vector2D& second_vec) const
+double Vector2D::Dot(const Vector2D& second_vec) const 
 {
 	return (this->x1 * second_vec.x1 + this->x2 * second_vec.x2);
 }

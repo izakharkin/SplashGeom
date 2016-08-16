@@ -58,14 +58,28 @@ Vector2D Line2D::Direction() const
 	return Vector2D(-this->B, this->A);
 }
 
-Vector2D Line2D::Normal() const
+Vector2D Line2D::NormalVec() const
 {
 	return Vector2D(this->A, this->B);
 }
 
+Segment2D Line2D::ToSegment() const
+{
+	Segment2D res_segment;
+
+	return res_segment;
+}
+
+Ray2D Line2D::ToRay() const
+{
+	Ray2D res_ray;
+
+	return res_ray;
+}
+
 double Line2D::Distance(const Point2D& point) const
 {
-	return PointIntoLine2D(point) / this->Normal().Norm();
+	return PointIntoLine2D(point) / this->NormalVec().Norm();
 }
 
 bool Line2D::Contains(const Point2D& point) const
@@ -78,17 +92,17 @@ Point2D Line2D::GetIntersection(const Line2D& second_line) const
 	double cross_prod_norms = Vector2D(this->A, this->B).OrientedCCW(Vector2D(second_line.A, second_line.B));
 	Point2D intersect_point;
 
-	if (cross_prod_norms <= EPS) // A1 / A2 == B1 / B2
+	if (fabs(cross_prod_norms) <= EPS) // A1 / A2 == B1 / B2
 	{
-		if (this->B * second_line.C == second_line.B * this->C) // .. == C1 / C2
+		if (this->B * second_line.C - second_line.B * this->C <= EPS) // .. == C1 / C2
 			intersect_point = Point2D(-INF, -INF);
 		else
 			intersect_point = Point2D(INF, INF);
 	}
 	else
 	{
-		double res_y = (this->C - second_line.C) / cross_prod_norms * this->A;
-		double res_x = -(this->B * res_y + this->C) / this->A;
+		double res_x = (second_line.C * this->B - this->C * second_line.B) / cross_prod_norms;
+		double res_y = (second_line.A * this->C - this->A * second_line.C) / cross_prod_norms;
 		intersect_point = Point2D(res_x, res_y);
 	}
 

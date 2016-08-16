@@ -35,11 +35,22 @@ public:
 	Polygon(int n);
 	Polygon(const vector<Point2D>& points);
 	void operator =(const vector<Point2D>& points);
+	// copying  = delete
+	Polygon(const Polygon& second_polygon) = delete;
+	void operator =(const Polygon& second_polygon) = delete;
+	// moving
+	Polygon(Polygon&& second_polygon);
+	void operator =(Polygon&& second_polygon);
 
-	double Area() const;
-	bool Contains(const Point2D& point) const;
-	bool Boundary(const Point2D&) const;
-	bool Intersect(const Segment2D&, Point2D&, Point2D&) const;
+	int Size() const;
+
+	virtual double Area() const;
+	virtual bool Contains(const Point2D& point) const;
+	virtual bool Boundary(const Point2D& point) const;
+	virtual bool Intersect(const Segment2D& segment, Point2D&, Point2D&) const;
+
+	vector<Point2D> GetIntersection(const Segment2D& segment) const;
+	Polygon GetIntersection(const Polygon& second_polygon) const;
 protected:
 	vector<Point2D> vertices_;
 };

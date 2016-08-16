@@ -2,20 +2,20 @@
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-This file is part of Splash.
+	This file is part of Splash.
 
-Splash is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+	Splash is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-Foobar is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+	Splash is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU General Public License
+	along with Splash.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "polygon.hpp"
 
@@ -39,7 +39,22 @@ void Polygon::operator = (const vector<Point2D>& points)
 	//std::copy(points.begin(), points.end(), vertices_.begin());
 }
 
-double Polygon::Area() const
+Polygon::Polygon(Polygon&& second_polygon)
+{
+	vertices_ = std::move(second_polygon.vertices_);
+}
+
+void Polygon::operator =(Polygon&& second_polygon)
+{
+	vertices_ = std::move(second_polygon.vertices_);
+}
+
+int Polygon::Size() const
+{
+	return vertices_.size();
+}
+
+double Polygon::Area() const 
 {
 	double area = 0;
 	int num_of_vertices = vertices_.size();

@@ -25,12 +25,15 @@
 
 #include <algorithm>
 #include <iostream>
+#include <memory>
 #include <vector>
 #include <string>
 
+using std::shared_ptr;
 using std::vector;
 using std::string;
 using std::swap;
+using std::move;
 
 #ifndef M_PI
 #define M_PI 3.1415926535

@@ -25,7 +25,7 @@ Segment2D::Segment2D()
 Segment2D::Segment2D(const Point2D& _a, const Point2D& _b)
 	: a(_a), b(_b) {}
 
-void Segment2D::Reversr()
+void Segment2D::Reverse()
 {
 	swap(a, b);
 }
@@ -35,7 +35,7 @@ double Segment2D::Length() const
 	return a.l2_distance(b);
 }
 
-Point2D Segment2D::Center() const
+Point2D Segment2D::GetCenter() const
 {
 	return (this->a + this->b) * 0.5;
 }
@@ -50,9 +50,14 @@ bool Segment2D::Point2DInBox(const Point2D& point) const
 	return lower_x <= point.x && point.x <= upper_x && lower_y <= point.y && point.y <= upper_y;
 }
 
-Vector2D Segment2D::Dir() const
+Vector2D Segment2D::Direction() const
 {
 	return Vector2D(a, b);
+}
+
+Vector2D Segment2D::NormalVec() const
+{
+	return Line2D(*this).NormalVec();
 }
 
 bool Segment2D::Contains(const Point2D& point) const
@@ -65,24 +70,25 @@ Point2D Segment2D::GetIntersection(const Segment2D& second_seg) const
 {
 	Line2D first_line(*this);
 	Line2D second_line(second_seg);
-	
+
 	Point2D intersect_point = first_line.GetIntersection(second_line);
 
-	if (intersect_point == Point2D(-INF, -INF))
-	{
-		if (this->Point2DInBox(second_seg.a))
-		{
+	if ( intersect_point == Point2D(-INF, -INF) ) {
+		if (this->Contains(second_seg.a)) {
 			intersect_point = second_seg.a;
-		}
-		else if (this->Point2DInBox(second_seg.b))
-		{
+		} else if (this->Contains(second_seg.b)) {
 			intersect_point = second_seg.b;
+		} else if (second_seg.Contains(this->a)) {
+			intersect_point = this->a;
+
+		} else if (second_seg.Contains(this->b)) {
+			intersect_point = this->b;
+		} else {
+			intersect_point = Point2D(INF, INF);
 		}
 	}
-	else
-	{
-		if ( !(this->Point2DInBox(intersect_point) && second_seg.Point2DInBox(intersect_point)) )
-		{
+	else {
+		if (!(this->Contains(intersect_point) && second_seg.Contains(intersect_point))) {
 			intersect_point = Point2D(INF, INF);
 		}
 	}

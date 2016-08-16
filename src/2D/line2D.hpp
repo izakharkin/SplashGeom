@@ -40,7 +40,10 @@ public:
 	double PointIntoLine2D(const Point2D& point_to_insert_into_line) const;
 	int Sign(const Point2D& point) const;
 	Vector2D Direction() const;
-	Vector2D Normal() const;
+	Vector2D NormalVec() const;
+
+	Segment2D ToSegment() const;
+	Ray2D ToRay() const;
 
 	double Distance(const Point2D& point) const;
 	double Distance(const Line2D& second_line) const; // !!! HERE ARE LINES IN 3D !!!

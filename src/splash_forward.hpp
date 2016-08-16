@@ -30,6 +30,8 @@ class Ellipse;
 class Circle;
 class Polygon;
 class Convex2D;
+class Rectangle;
+class Square;
 class Triangle;
 
 class Point3D;
@@ -40,6 +42,7 @@ class Ray3D;
 class Shape3D;
 class Ellipsoid;
 class Sphere;
+class Cylinder;
 class Polyhedron;
 class Convex3D;
 
