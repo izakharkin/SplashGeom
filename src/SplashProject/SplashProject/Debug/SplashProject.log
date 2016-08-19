@@ -1,0 +1,28 @@
+﻿Сборка начата 19.08.2016 14:11:11.
+     1>Проект "C:\My_Git\GitHub\Splash\src\SplashProject\SplashProject\SplashProject.vcxproj" в узле 2 (целевые объекты Build).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _USRDLL /D SPLASHPROJECT_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt 2D\convex2D.cpp 2D\polygon.cpp 2D\rectangle.cpp 2D\triangle.cpp 2D\vector2D.cpp 2D\voronoi2D.cpp bstree.cpp main.cpp test_convex2D.cpp
+         test_convex2D.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         main.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         bstree.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\bstree.cpp(23): error C2059: синтаксическая ошибка: {
+         voronoi2D.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         vector2D.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         triangle.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         rectangle.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         polygon.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         convex2D.cpp
+     1>c:\my_git\github\splash\src\splashproject\splashproject\2d\ray2d.hpp(35): error C2079: "Ray2D::dir_" использует неопределенный class "Vector2D"
+         Создание кода...
+     1>Сборка проекта "C:\My_Git\GitHub\Splash\src\SplashProject\SplashProject\SplashProject.vcxproj" завершена (целевые объекты Build) с ошибкой.
+
+Ошибка сборки.
+
+Затраченное время: 00:00:02.32
