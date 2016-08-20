@@ -17,40 +17,48 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef BST_HPP_
-#define BST_HPP_
+#include "bstree.hpp"
 
-#include "splash_forward.hpp"
-#include "splash_utils.hpp"
+BeachNode::BeachNode(const Arc& arc)
+	: arc_(arc) {}
 
-#include "2D/point2D.hpp"
-
-class BeachNode
+Arc::Arc()
+: focus_(nullptr), directrix_pos_(0.0) {}
+/*
+Arc::Arc(const PointEvent& focus)
+	: focus_(make_shared<PointEvent>(focus))
 {
-public:
+	directrix_pos_ = focus_.Ordinate();
+}
+*/
+BeachSearchTree::BeachSearchTree()
+	: root_(nullptr) {}
 
-private:
-	shared_ptr<BeachNode> left;
-	shared_ptr<BeachNode> right;
-};
-
-class Arc : BeachNode
+void BeachSearchTree::AddArc(const Arc& new_arc)
 {
-public:
+	if (!root_) {
+		root_ = make_shared<BeachNode>(BeachNode(new_arc));
+	} else if (0) {
 
-private:
-	shared_ptr<Point2D> focus;
+	}
+}
 
-};
-
-class BeachSearchTree
+void BeachSearchTree::DeleteArc(const Arc& arc_to_del)
 {
-public:
-	//BeachSearchTree();
-	
-	void AddArc(const Arc& new_arc);
-private:
-	shared_ptr<BeachNode> root;
-};
+	if (!root_) {
+		return;
+	} else if (0) {
 
-#endif /*BST_HPP_*/
+	}
+}
+
+void BeachSearchTree::HandlePointEvent(const PointEvent& point_event, DCEL& edges)
+{
+	Arc new_arc(point_event);
+	this->AddArc(new_arc);
+}
+
+void BeachSearchTree::HandleCircleEvent(const CircleEvent& circle_event, DCEL& edges)
+{
+
+}

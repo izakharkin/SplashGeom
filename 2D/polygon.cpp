@@ -25,12 +25,24 @@ Polygon::Polygon()
 Polygon::Polygon(int n)
 	: vertices_(n) {}
 
+Polygon::Polygon(const Polygon& second_polygon)
+{
+	vertices_.resize(second_polygon.Size());
+	std::copy(second_polygon.vertices_.begin(), second_polygon.vertices_.end(), vertices_.begin());
+}
+
+void Polygon::operator =(const Polygon& second_polygon)
+{
+	vertices_ = second_polygon.vertices_;
+}
+
 Polygon::Polygon(const vector<Point2D>& points)
 {
+	vertices_.resize(points.size());
 	std::copy(points.begin(), points.end(), vertices_.begin());
 }
 
-void Polygon::operator = (const vector<Point2D>& points)
+void Polygon::operator =(const vector<Point2D>& points)
 {
 	std::copy(points.begin(), points.end(), vertices_.begin());
 }

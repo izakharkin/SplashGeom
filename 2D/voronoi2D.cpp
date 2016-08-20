@@ -20,32 +20,34 @@
 #include "voronoi2D.hpp"
 
 Voronoi2DLocus::Voronoi2DLocus()
-	: region() {}
+	: region_(nullptr), site_() {}
 
-Voronoi2DLocus::Voronoi2DLocus(const Convex2D& locus)
-	: region(locus) {}
+Voronoi2DLocus::Voronoi2DLocus(const Convex2D& locus, const Point2D& site)
+	: region_(make_shared<Convex2D>(locus)), site_(site) {}
 
 Convex2D Voronoi2DLocus::GetRegion()
 {
-	return region;
+	return *region_;
 }
 
 VoronoiDiagram2D::VoronoiDiagram2D()
-	: diagram() {}
+	: diagram_() {}
 
 VoronoiDiagram2D::VoronoiDiagram2D(const vector<Point2D>& points)
 {
 	MakeVoronoiDiagram2DHalfPlanes(points, kMaxRectangle);
 }
 
-Convex2D GetHalfPlaneIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box)
+Convex2D GetHalfPlanesIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box)
 {
 	if (halfplanes.size() == 1) {
 		return border_box.GetIntersectionalConvex2D(cur_point, halfplanes[0]);
 	} else {
 		int middle = halfplanes.size() >> 1;
-		Convex2D first_convex = GetHalfPlaneIntersection(cur_point, vector<Line2D>(halfplanes.begin(), halfplanes.begin() + middle), border_box);
-		Convex2D second_convex = GetHalfPlaneIntersection(cur_point, vector<Line2D>(halfplanes.begin() + middle, halfplanes.end()), border_box);
+		vector<Line2D> first_half(halfplanes.begin(), halfplanes.begin() + middle);
+		vector<Line2D> second_half(halfplanes.begin() + middle, halfplanes.end());
+		Convex2D first_convex = GetHalfPlanesIntersection(cur_point, first_half, border_box);
+		Convex2D second_convex = GetHalfPlanesIntersection(cur_point, second_half, border_box);
 		return first_convex.GetIntersectionalConvex(second_convex);
 	}
 }
@@ -61,7 +63,8 @@ Voronoi2DLocus VoronoiDiagram2D::MakeVoronoi2DLocus(const Point2D& cur_point, co
 			halfplanes.push_back(cur_halfplane);
 		}
 	}
-	cur_locus.region = GetHalfPlaneIntersection(cur_point, halfplanes, border_box);
+	*cur_locus.region_ = GetHalfPlanesIntersection(cur_point, halfplanes, border_box);
+	cur_locus.site_ = cur_point;
 	return cur_locus;
 }
 
@@ -70,29 +73,40 @@ VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DHalfPlanes(const vector<P
 	Voronoi2DLocus cur_locus;
 	for (size_t i = 0; i < points.size(); ++i) {
 		cur_locus = MakeVoronoi2DLocus(points[i], points, border_box);
-		diagram.push_back(cur_locus);
+		diagram_.push_back(cur_locus);
 	}
 	return *this;
 }
 
-VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box)
+DCEL VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box)
 {
-	VoronoiDiagram2D result_diagram;
-	priority_queue<Point2D, vector<Point2D>, OrdinateOrder> sites(points.begin(), points.end()); // queue of sites, ordered by ordinate in decreasing order
-	priority_queue<Event> events_queue;
-	shared_ptr<Event> cur_event;
-	shared_ptr<PointEvent> which_event;
+	priority_queue<PointEvent> point_events(points.begin(), points.end());
+	priority_queue<CircleEvent> circle_events;
+	shared_ptr<PointEvent> cur_point_event;
+	shared_ptr<CircleEvent> cur_circle_event;
 	BeachSearchTree beach_line;
-	while (!events_queue.empty()) {
-		cur_event = make_shared<Event>(events_queue.top());
-		events_queue.pop();
-		const shared_ptr<PointEvent> which_event(dynamic_cast<PointEvent*>(cur_event.get()));
-		if (which_event != nullptr) {
+	bool no_circle_events = true;
+	DCEL edges;
 
-		} else /* cur_event == circle_event */ {
-
+	while (!point_events.empty()) {
+		cur_point_event = make_shared<PointEvent>(point_events.top());
+		if (!circle_events.empty()) {
+			cur_circle_event = make_shared<CircleEvent>(circle_events.top());
+			no_circle_events = false;
+		}
+		if (no_circle_events || cur_point_event > cur_circle_event) {
+			beach_line.HandlePointEvent(*cur_point_event, edges);
+			point_events.pop();
+		} else {
+			beach_line.HandleCircleEvent(*cur_circle_event, edges);
+			circle_events.pop();
 		}
 	}
-	//result_diagram.diagram = MakeDiagramFromList();
-	return result_diagram;
+
+	return edges;
 }
+
+// Notes:
+//		shared_ptr<PointEvent> which_event;
+// 		const shared_ptr<PointEvent> which_event(dynamic_cast<PointEvent*>(cur_event.get()));
+//		result_diagram.diagram = MakeDiagramFromList();

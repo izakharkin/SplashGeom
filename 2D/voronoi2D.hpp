@@ -31,7 +31,7 @@
 #include "convex2D.hpp"
 #include "rectangle.hpp"
 
-#include "../bstree.hpp"
+#include "bstree.hpp"
 #include "event.hpp"
 #include "dcel.hpp"
 
@@ -39,16 +39,17 @@ class Voronoi2DLocus
 {
 public:
 	Voronoi2DLocus();
-	Voronoi2DLocus(const Convex2D& locus);
+	Voronoi2DLocus(const Convex2D& locus, const Point2D& site);
 
 	Convex2D GetRegion();
 
 	friend class VoronoiDiagram2D;
 private:
-	Convex2D region;
+	shared_ptr<Convex2D> region_;
+	Point2D site_;
 };
 
-Convex2D GetHalfPlaneIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box);
+Convex2D GetHalfPlanesIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box);
 
 class VoronoiDiagram2D
 {
@@ -59,9 +60,9 @@ public:
 	vector<Voronoi2DLocus> GetDiagram() const;
 
 	VoronoiDiagram2D MakeVoronoiDiagram2DHalfPlanes(const vector<Point2D>& points, const Rectangle& border_box);
-	VoronoiDiagram2D MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box);
+	DCEL MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box);
 private:
-	vector<Voronoi2DLocus> diagram;
+	vector<Voronoi2DLocus> diagram_;
 
 	Voronoi2DLocus MakeVoronoi2DLocus(const Point2D& cur_point, const vector<Point2D>& points, const Rectangle& border_box);
 };

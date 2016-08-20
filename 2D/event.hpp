@@ -28,13 +28,13 @@
 class Event
 {
 public:
-	virtual Point2D GetSomeNew();
+	virtual Point2D GetPointOfEvent();
 	bool operator <(const Event& second_event) const;
 protected:
 	Point2D point_of_event;
 };
 
-class OrdinateOrder
+class PointOrder
 {
 public:
 	bool operator() (const Point2D& first_point, const Point2D& second_point) {
@@ -44,12 +44,16 @@ public:
 
 class PointEvent : public Event
 {
+public:
+	PointEvent(const Point2D& site);
 
+	double Ordinate() const;
 };
 
 class CircleEvent : public Event
 {
-
+public:
+	double Ordinate() const;
 };
 
 #endif /* EVENT_HPP */

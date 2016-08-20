@@ -92,7 +92,7 @@ Point2D Line2D::GetIntersection(const Line2D& second_line) const
 	double cross_prod_norms = Vector2D(this->A, this->B).OrientedCCW(Vector2D(second_line.A, second_line.B));
 	Point2D intersect_point;
 	if (fabs(cross_prod_norms) <= EPS) /* A1 / A2 == B1 / B2 */ {
-		if (this->B * second_line.C - second_line.B * this->C <= EPS) /* .. == C1 / C2 */ {
+		if (fabs(this->B * second_line.C - second_line.B * this->C) <= EPS) /* .. == C1 / C2 */ {
 			intersect_point = kNegInfPoint2D;
 		} else {
 			intersect_point = kInfPoint2D;
@@ -110,7 +110,7 @@ Point2D Line2D::GetIntersection(const Segment2D& segment) const
 	Line2D second_line(segment);
 	Point2D intersect_point = this->GetIntersection(second_line);
 	if (intersect_point == kNegInfPoint2D) {
-		intersect_point = segment.a;
+		intersect_point = segment.b;
 	} else if (intersect_point != kInfPoint2D && !segment.Contains(intersect_point)) {
 		intersect_point = kInfPoint2D;
 	}

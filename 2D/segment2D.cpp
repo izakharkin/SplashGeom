@@ -47,7 +47,8 @@ bool Segment2D::Point2DInBox(const Point2D& point) const
 	double lower_y = std::min(a.y, b.y);
 	double upper_y = std::max(a.y, b.y);
 
-	return lower_x <= point.x && point.x <= upper_x && lower_y <= point.y && point.y <= upper_y;
+	return lower_x <= point.x && point.x <= upper_x && 
+		   lower_y <= point.y && point.y <= upper_y;
 }
 
 Vector2D Segment2D::Direction() const
@@ -63,7 +64,7 @@ Vector2D Segment2D::NormalVec() const
 bool Segment2D::Contains(const Point2D& point) const
 {
 	Line2D cur_line(this->a, this->b);
-	return this->Point2DInBox(point) && cur_line.Contains(point);
+	return cur_line.Contains(point) && this->Point2DInBox(point);
 }
 
 bool Segment2D::LooksAt(const Segment2D& second_segment) const
@@ -74,7 +75,7 @@ bool Segment2D::LooksAt(const Segment2D& second_segment) const
 	if (cross_product < 0 && side < 0 || cross_product > 0 && side > 0) {
 		looks_at = true;
 	} else if (fabs(cross_product) <= EPS) /* == 0 */ {
-		looks_at = second_segment.Point2DInBox(this->b);
+		looks_at = second_segment.Contains(this->b);
 	}
 	return looks_at;
 }
@@ -85,14 +86,14 @@ Point2D Segment2D::GetIntersection(const Segment2D& second_seg) const
 	Line2D second_line(second_seg);
 	Point2D intersect_point = first_line.GetIntersection(second_line);
 	if ( intersect_point == kNegInfPoint2D ) {
-		if (this->Contains(second_seg.a)) {
-			intersect_point = second_seg.a;
-		} else if (this->Contains(second_seg.b)) {
+		if (this->Contains(second_seg.b)) {
 			intersect_point = second_seg.b;
-		} else if (second_seg.Contains(this->a)) {
-			intersect_point = this->a;
+		} else if (this->Contains(second_seg.a)) {
+			intersect_point = second_seg.a;
 		} else if (second_seg.Contains(this->b)) {
 			intersect_point = this->b;
+		} else if (second_seg.Contains(this->a)) {
+			intersect_point = this->a;
 		} else {
 			intersect_point = kInfPoint2D;
 		}

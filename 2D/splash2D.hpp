@@ -33,5 +33,6 @@
 #include "rectangle.hpp"
 #include "square.hpp"
 #include "triangle.hpp"
+#include "voronoi2D.hpp"
 
 #endif /*SPLASH2D_HPP_*/

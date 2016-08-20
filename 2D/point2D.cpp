@@ -72,6 +72,11 @@ Point2D Point2D::operator / (double num) const
 	return Point2D(this->x / num, this->y / num);
 }
 
+Point2D Point2D::operator - () const 
+{
+	return Point2D(-x, -y);
+}
+
 double Point2D::l1_distance(const Point2D& b) const
 {
 	return fabs(this->x - b.x) + fabs(this->y - b.y);

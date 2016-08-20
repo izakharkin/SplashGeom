@@ -50,3 +50,8 @@ Vector3D Vector3D::Ortopair() const
 {
 	return Vector3D(-x2, x1, 0);
 }
+
+Point3D operator + (const Point3D& point_for_add, const Vector3D& vec_to_add)
+{
+	return Point3D(point_for_add.x + vec_to_add.x1, point_for_add.y + vec_to_add.x2, point_for_add.z + vec_to_add.x3);
+}

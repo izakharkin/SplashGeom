@@ -17,44 +17,48 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UTILS_HPP_
-#define UTILS_HPP_
+#ifndef BST_HPP_
+#define BST_HPP_
 
-#include <cassert>
-#include <cfloat>
-#include <cmath>
+#include "../splash_forward.hpp"
+#include "../splash_utils.hpp"
 
-#include <algorithm>
-#include <iostream>
-#include <memory>
-#include <vector>
-#include <string>
-#include <queue>
-#include <array>
-#include <list>
+#include "point2D.hpp"
+#include "event.hpp"
+#include "dcel.hpp"
 
-using std::priority_queue;
-using std::make_shared;
-using std::shared_ptr;
-using std::unique_ptr;
-using std::vector;
-using std::string;
-using std::array;
-using std::swap;
-using std::move;
-using std::list;
+class Arc
+{
+public:
+	Arc();
+	Arc(const PointEvent& focus);
+private:
+	shared_ptr<Point2D> focus_;
+	double directrix_pos_;
+};
 
-#ifndef M_PI
-#define M_PI 3.1415926535
-#endif
+class BeachNode
+{
+public:
+	BeachNode(const Arc& arc);
+private:
+	Arc arc_;
+	shared_ptr<BeachNode> left_node_;
+	shared_ptr<BeachNode> right_node_;
+};
 
-#ifndef M_E
-#define M_E 2.71828182845
-#endif
+class BeachSearchTree
+{
+public:
+	BeachSearchTree();
 
-const double EPS = 1e-9;
-const double INF = DBL_MAX;
+	void AddArc(const Arc& new_arc);
+	void DeleteArc(const Arc& arc_to_del);
 
-/*constexpr*/int sgn(double d);
+	void HandlePointEvent(const PointEvent& point_event, DCEL& edges);
+	void HandleCircleEvent(const CircleEvent& circle_event, DCEL& edges);
+private:
+	shared_ptr<BeachNode> root_;
+};
 
-#endif /*UTILS_HPP_*/
+#endif /*BST_HPP_*/

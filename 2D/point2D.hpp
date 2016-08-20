@@ -40,6 +40,8 @@ public:
 	Point2D operator * (double) const;
 	Point2D operator / (double) const;
 
+	Point2D operator - () const;
+
 	bool operator == (const Point2D&) const;
 	bool operator != (const Point2D&) const;
 	bool operator < (const Point2D&) const;

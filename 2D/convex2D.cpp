@@ -20,18 +20,27 @@
 #include "convex2D.hpp"
 
 Convex2D::Convex2D()
-	: Polygon(), cur_vertex_ind() {}
+	: Polygon(), cur_vertex_ind(0) {}
 
 Convex2D::Convex2D(int n)
 	: Polygon(n), cur_vertex_ind(0) {}
 
 Convex2D::Convex2D(const Convex2D& second_polygon)
-	: Polygon(second_polygon.vertices_), cur_vertex_ind(second_polygon.cur_vertex_ind) {}
+	: Polygon(second_polygon), cur_vertex_ind(second_polygon.cur_vertex_ind) {}
 
-void Convex2D::operator = (const Convex2D& second_polygon)
+void Convex2D::operator =(const Convex2D& second_polygon)
 {
 	vertices_ = second_polygon.vertices_;
 	cur_vertex_ind = second_polygon.cur_vertex_ind;
+}
+
+Convex2D::Convex2D(const vector<Point2D>& points)
+	: Polygon(points), cur_vertex_ind(0) {}
+
+void Convex2D::operator =(const vector<Point2D>& points)
+{
+	vertices_ = points;
+	cur_vertex_ind = 0;
 }
 
 Convex2D::Convex2D(Convex2D&& second_polygon)
@@ -45,9 +54,6 @@ void Convex2D::operator =(Convex2D&& second_polygon)
 	vertices_ = std::move(second_polygon.vertices_);
 	cur_vertex_ind = second_polygon.cur_vertex_ind;
 }
-
-Convex2D::Convex2D(const vector<Point2D>& points)
-	: Polygon(points), cur_vertex_ind(0) {}
 
 void Convex2D::AddVertex(const Point2D& new_vertex)
 {
@@ -259,9 +265,8 @@ vector<Point2D> Convex2D::GetIntersection(const Segment2D&) const
 // returns number of case
 int EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge)
 {
-	bool which_edge = 0;
 	bool first_looks_at_second = first_edge.LooksAt(second_edge);
-	bool second_looks_at_first = first_edge.LooksAt(first_edge);
+	bool second_looks_at_first = second_edge.LooksAt(first_edge);
 	if (first_looks_at_second && second_looks_at_first) {
 		return 1;
 	} else if (first_looks_at_second) {
@@ -291,34 +296,45 @@ char Moving(const Segment2D& first_edge, const Segment2D& second_edge, bool stat
 	char which_edge_is_moving = 'f'; // 'f' - edge of first polygon, 's' - edge of second polygon
 	int case_num = EdgesCaseNum(first_edge, second_edge);
 	char now_inside = WhichEdgeIsInside(first_edge, second_edge);
-	switch (case_num)
-	{
-		case 1:
-			if (now_inside == 'f') {
-				which_edge_is_moving = 's';
-			} else {
+	switch (case_num) {
+		case 1: {
+				if (now_inside == 'f') {
+					which_edge_is_moving = 's';
+				}
+				else {
+					which_edge_is_moving = 'f';
+				}
+				break;
+		}
+		case 2: {
 				which_edge_is_moving = 'f';
-			}
-		case 2:
-			which_edge_is_moving = 'f';
-		case 3:
-			which_edge_is_moving = 's';
-		case 4:
-			if (now_inside == 'f') {
+				break;
+		}
+		case 3: {
 				which_edge_is_moving = 's';
-			}
-			else {
-				which_edge_is_moving = 'f';
-			}
+				break;
+		}
+		case 4: {
+				if (now_inside == 'f') {
+					which_edge_is_moving = 's';
+				}
+				else {
+					which_edge_is_moving = 'f';
+				}
+				break;
+		}
 	}
-	if (state == 0) { // already was an intersection
+	if (state == 0 && (case_num == 2 || case_num == 3)) {
 		Point2D vertex_to_add;
 		if (now_inside == 'f') {
 			vertex_to_add = first_edge.b;
 		} else if (now_inside == 's') {
 			vertex_to_add = second_edge.b;
 		} else /* now_inside == 'n' */ { 
-			vertex_to_add = first_edge.b; // ?!
+			if (case_num == 2)
+				vertex_to_add = first_edge.b; // ?!
+			else /* case_num == 3 */
+				vertex_to_add = second_edge.b;
 		}
 		if (vertex_to_add != result_polygon.GetCurVertex())
 			result_polygon.AddVertex(vertex_to_add);
@@ -354,7 +370,7 @@ Convex2D Convex2D::GetIntersectionalConvex(Convex2D& second_polygon)
 		moving_edge = Moving(cur_fp_edge, cur_sp_edge, no_intersection, result_polygon);
 		if (moving_edge == 'f') {
 			this->MoveCurVertex();
-		} else /* if (moving_edge == 's') */ {
+		} else {
 			second_polygon.MoveCurVertex();
 		}
 	}

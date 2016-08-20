@@ -62,7 +62,7 @@ public:
 	// Coplexity: O(1)
 	Vector3D Ortopair() const;
 
-//	friend Point3D operator + (const Point3D& point_for_add, const Vector3D& vec_to_add);
+	friend Point3D operator + (const Point3D& point_for_add, const Vector3D& vec_to_add);
 };
 
 #endif /*VECTOR3D_HPP_*/

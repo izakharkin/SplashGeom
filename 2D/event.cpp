@@ -19,13 +19,28 @@
 */
 #include "event.hpp"
 
-Point2D Event::GetSomeNew()
+Point2D Event::GetPointOfEvent()
 {
-	return Point2D();
+	return point_of_event;
 }
 
 bool Event::operator <(const Event& second_event) const
 {
 	return this->point_of_event.y > second_event.point_of_event.y 
 		   || (this->point_of_event.y - second_event.point_of_event.y) <= EPS && this->point_of_event.x < second_event.point_of_event.x;
+}
+
+PointEvent::PointEvent(const Point2D& site)
+{
+	point_of_event = site;
+}
+
+double PointEvent::Ordinate() const
+{
+	return point_of_event.y;
+}
+
+double CircleEvent::Ordinate() const
+{
+	return point_of_event.y;
 }

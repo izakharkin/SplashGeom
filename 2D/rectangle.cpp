@@ -51,12 +51,12 @@ Convex2D Rectangle::GetIntersectionalConvex2D(const Point2D& cur_point, const Li
 		int j = (i + 1) % sz;
 		cur_side = Segment2D(vertices_[i], vertices_[j]);
 		Point2D intersection_point = halfplane.GetIntersection(cur_side);
-		if (intersection_point != Point2D(INF, INF))
-			conv_points.push_back(cur_side.GetIntersection(halfplane));
+		if (intersection_point != kInfPoint2D)
+			conv_points.push_back(intersection_point);
 		if (halfplane.Sign(cur_point) == halfplane.Sign(vertices_[i]))
 			conv_points.push_back(vertices_[i]);
 	}
-	return Convex2D().MakeConvexHullJarvis(conv_points);
+	return Convex2D().MakeConvexHullGrehem(conv_points);
 }
 
 vector<Point2D> Rectangle::GetIntersection(const Line2D&) const
