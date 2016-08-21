@@ -1,49 +1,38 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra
+// Splash (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
 	This file is part of Splash.
-
+	
 	Splash is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
-
+	
 	Splash is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
-
+	
 	You should have received a copy of the GNU General Public License
-	along with Splash.  If not, see <http://www.gnu.org/licenses/>.
+	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef UTILS_HPP_
-#define UTILS_HPP_
+#ifndef EDGE_HPP
+#define EDGE_HPP
 
-#include <cfloat>
-#include <cmath>
+#include "point2D.hpp"
+#include "vertex.hpp"
+#include <stdio.h>
+#include <array>
 
-#include <algorithm>
-#include <iostream>
-#include <memory>
-#include <vector>
-#include <string>
-#include <assert.h>
+class Edge 
+{
+public:
+    array<Vertex*, 2> vertices;
+    array<size_t, 2> indexes;
+    
+    void delete_edge() const;
+    Vertex* other_vertex(Vertex*) const;
+};
 
-using std::shared_ptr;
-using std::vector;
-using std::string;
-using std::swap;
-using std::move;
-using std::array;
-
-#ifndef M_PI
-#define M_PI 3.1415926535
-#endif
-
-const double EPS = 1e-9;
-const double INF = DBL_MAX;
-
-/*constexpr*/int sgn(double d);
-
-#endif /*UTILS_HPP_*/
+#endif /* EDGE_HPP */
