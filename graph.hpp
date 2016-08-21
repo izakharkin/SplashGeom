@@ -26,25 +26,24 @@ class DelaunayTriangulationBuilder;
 
 class Graph {
 public:
+    std::vector<std::shared_ptr<Vertex>>::iterator add_vertex(const Point2D& point2D);
     
-    std::vector<std::unique_ptr<Vertex>>::iterator add_vertex(const Point2D&);
-    std::vector<std::unique_ptr<Vertex>>::iterator add_vertex(Point2D&&);
+    std::vector<std::shared_ptr<Vertex>>::iterator add_vertex(Point2D&& point2D);
     
-    // Adds an edge between vertex1 and vertex2. Returns nullptr
-    // if such an edge exists
-    Edge* add_edge(std::vector<std::unique_ptr<Vertex>>::iterator vertex1,std::vector<std::unique_ptr<Vertex>>::iterator vertex2);
+    // returns nullptr if such edge exists
+    std::shared_ptr<Edge> add_edge(std::vector<std::shared_ptr<Vertex>>::iterator vertex1,
+                                   std::vector<std::shared_ptr<Vertex>>::iterator vertex2);
     
-    // Vertices of the graph
-    std::vector<std::unique_ptr<Vertex>> vertices;
-    // Vector of edges
-    std::vector<std::unique_ptr<Edge>> edges;
+    std::vector<std::shared_ptr<Vertex>> vertices;
+    std::vector<std::shared_ptr<Edge>> edges;
     
 private:
-    
     friend class DelaunayTriangulationBuilder;
     
-    static void print_all_neighbours(Vertex*);
-    std::vector<Vertex*> get_similar_vertices(Vertex*, Vertex*);
+    static void print_all_neighbours(const std::shared_ptr<Vertex>& x);
+    
+    std::vector<std::shared_ptr<Vertex>> get_similar_vertices(std::shared_ptr<Vertex> x, std::shared_ptr<Vertex> y);
 };
+
 
 #endif /* graph_hpp */

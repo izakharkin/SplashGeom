@@ -29,6 +29,6 @@ void Edge::delete_edge() const {
     }
 }
 
-Vertex* Edge::other_vertex(Vertex* x) const {
-    return vertices[0] == x ? vertices[1] : vertices[0];
+std::shared_ptr<Vertex> Edge::other_vertex(const std::shared_ptr<Vertex>& x) const {
+    return vertices[0].get() == x.get() ? vertices[1] : vertices[0];
 }

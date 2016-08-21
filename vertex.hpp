@@ -24,12 +24,13 @@ class Edge;
 
 class Vertex {
 public:
-    Point2D point2D;
-    std::vector<Edge*> edges;
-    size_t index;
     Vertex() : edges(0) { }
     Vertex(const Point2D& point2D_) : point2D(point2D_), edges(0) { }
     Vertex(Point2D&& point2D_) : point2D(point2D_), edges(0) { }
+    
+    Point2D point2D;
+    std::vector<std::shared_ptr<Edge>> edges;
+    size_t index;
 };
 
 #endif /* vertex_hpp */

@@ -25,11 +25,13 @@
 
 class Edge {
 public:
-    array<Vertex*, 2> vertices;
-    array<size_t, 2> indexes;
     void delete_edge() const;
     
-    Vertex* other_vertex(Vertex*) const;
+    std::shared_ptr<Vertex> other_vertex(const std::shared_ptr<Vertex>& x) const;
+    
+    std::array<std::shared_ptr<Vertex>, 2> vertices;
+    std::array<size_t, 2> indexes;
 };
+
 
 #endif /* edge_hpp */

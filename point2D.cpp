@@ -47,7 +47,7 @@ bool Point2D::operator != (const Point2D& b) const
 
 bool Point2D::operator < (const Point2D& b) const
 {
-	return this->x < b.x - EPS || fabs(this->x - b.x) < EPS &&  this->y < b.y - EPS;
+	return (this->x < b.x - EPS || fabs(this->x - b.x) < EPS) &&  this->y < b.y - EPS;
 }
 
 Point2D Point2D::operator + (const Point2D& b) const
