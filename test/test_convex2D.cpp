@@ -21,8 +21,11 @@ int main()
 	for (int i = 0; i < n2; ++i)
 		cin >> points[i];
 
-	for_each(conv1.GetVertices().begin(), conv1.GetVertices().end(), 
-			[](const Point2D& cur_point) { cout << cur_point << ' '; });
+	for (auto i : conv1.GetVertices())
+		cout << i << ' ';
+	cout << "\n";
+	for (auto i : conv2.GetVertices())
+		cout << i << ' ';
 
 	return 0;
 }
