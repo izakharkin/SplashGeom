@@ -69,4 +69,8 @@ private:
 	size_t cur_vertex_ind;
 };
 
+int EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge);
+char WhichEdgeIsInside(const Segment2D& first_edge, const Segment2D& second_edge);
+char Moving(const Segment2D& first_edge, const Segment2D& second_edge, bool state, Convex2D& result_polygon);
+
 #endif /*CONVEX2D_HPP_*/

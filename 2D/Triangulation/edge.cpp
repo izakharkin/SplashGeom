@@ -15,34 +15,20 @@
 	along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef graph_hpp
-#define graph_hpp
-
-#include <stdio.h>
 #include "edge.hpp"
-#include "vertex.hpp"
 
-class DelaunayTriangulationBuilder;
+void Edge::delete_edge() const {
+    for (int i = 0; i < 2; ++i) {
+        if (vertices[i]->edges.back()->vertices[0] == vertices[i]) {
+            vertices[i]->edges.back()->indexes[0] = indexes[i];
+        } else {
+            vertices[i]->edges.back()->indexes[1] = indexes[i];
+        }
+        vertices[i]->edges[indexes[i]] = vertices[i]->edges.back();
+        vertices[i]->edges.pop_back();
+    }
+}
 
-class Graph 
-{
-public:
-    vector<unique_ptr<Vertex>>::iterator add_vertex(const Point2D&);
-    vector<unique_ptr<Vertex>>::iterator add_vertex(Point2D&&);
-    
-    // Adds an edge between vertex1 and vertex2. Returns nullptr
-    // if such an edge exists
-    Edge* add_edge(std::vector<std::unique_ptr<Vertex>>::iterator vertex1,std::vector<std::unique_ptr<Vertex>>::iterator vertex2);
-    
-    // Vertices of the graph
-    vector<unique_ptr<Vertex>> vertices;
-    // Vector of edges
-    vector<unique_ptr<Edge>> edges;
-private:
-    friend class DelaunayTriangulationBuilder;
-    
-    static void print_all_neighbours(Vertex*);
-    vector<Vertex*> get_similar_vertices(Vertex*, Vertex*);
-};
-
-#endif /* graph_hpp */
+std::shared_ptr<Vertex> Edge::other_vertex(const std::shared_ptr<Vertex>& x) const {
+    return vertices[0].get() == x.get() ? vertices[1] : vertices[0];
+}

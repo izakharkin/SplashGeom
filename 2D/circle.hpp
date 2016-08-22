@@ -30,12 +30,14 @@ class Circle : public Ellipse
 public:
 	Circle();
 	Circle(const Point2D& center, double radius);
+	Circle(const Point2D& p1, const Point2D& p2, const Point2D& p3);
 	
 	void SetCenter(const Point2D&);
 	void SetRadius(double);
 
 	Point2D GetCenter() const;
 	double GetRadius() const;
+	Point2D GetLowestPoint() const;
 
 	double Area() const;
 	bool Contains(const Point2D&) const;

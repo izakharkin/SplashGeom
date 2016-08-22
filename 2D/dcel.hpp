@@ -30,11 +30,15 @@ class EdgeNode
 {
 public:
 	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& p2);
+	EdgeNode(const Point2D& p1, const Point2D& site);
+	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+
+	void Finish(const Point2D& p2);
 private:
 	Segment2D edge_;
 	shared_ptr<EdgeNode> twin_;
 	shared_ptr<Point2D> site_;
+	bool finished_;
 };
 
 // Double-Connected(Linked) Edge List

@@ -25,6 +25,16 @@ Circle::Circle()
 Circle::Circle(const Point2D& center, double radius)
 	: Ellipse(center, radius, radius) {}
 
+Circle::Circle(const Point2D& p1, const Point2D& p2, const Point2D& p3)
+{
+	Segment2D first_segment(p1, p2);
+	Segment2D second_segment(p2, p3);
+	Line2D first_perpendicular(first_segment.GetCenter(), first_segment.NormalVec());
+	Line2D second_perpendicular(second_segment.GetCenter(), second_segment.NormalVec());
+	center_ = first_perpendicular.GetIntersection(second_perpendicular);
+	little_haxis_ = big_haxis_ = center_.l2_distance(p1);
+}
+
 void Circle::SetCenter(const Point2D& new_center)
 {
 	center_ = new_center;
@@ -42,6 +52,11 @@ Point2D Circle::GetCenter() const
 double Circle::GetRadius() const
 {
 	return little_haxis_;
+}
+
+Point2D Circle::GetLowestPoint() const
+{
+	return Point2D(this->center_ + Point2D(0, this->center_.y + this->little_haxis_));
 }
 
 double Circle::Area() const

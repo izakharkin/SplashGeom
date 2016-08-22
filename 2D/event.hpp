@@ -28,10 +28,11 @@
 class Event
 {
 public:
-	virtual Point2D GetPointOfEvent();
+	Event(const Point2D& point_of_event);
+	virtual Point2D GetPointOfEvent() const;
 	bool operator <(const Event& second_event) const;
 protected:
-	Point2D point_of_event;
+	Point2D point_of_event_;
 };
 
 class PointOrder
@@ -47,12 +48,16 @@ class PointEvent : public Event
 public:
 	PointEvent(const Point2D& site);
 
+	double Abscissa() const;
 	double Ordinate() const;
 };
 
 class CircleEvent : public Event
 {
 public:
+	CircleEvent(const Point2D& new_voro_vertex);
+
+	double Abscissa() const;
 	double Ordinate() const;
 };
 

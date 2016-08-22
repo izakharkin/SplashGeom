@@ -27,63 +27,55 @@
 class DelaunayTriangulationBuilder {
 public:
     DelaunayTriangulationBuilder() { }
-    void build(const std::vector<Point2D>&);
+    void build(const std::vector<Point2D>& points);
     
     Graph get_result();
+    
     bool check();
-    
 private:
-    void resort_vertices(const std::vector<std::unique_ptr<Vertex>>::iterator&, const std::vector<std::unique_ptr<Vertex>>::iterator&, bool);
-    static double polar_angle(const Point2D&);
+    void resort_vertices(const std::vector<std::shared_ptr<Vertex>>::iterator& begin,
+                         const std::vector<std::shared_ptr<Vertex>>::iterator& end, bool by_x);
     
-    std::pair<Edge*, Edge*> add_common_tangents(const std::vector<std::unique_ptr<Vertex>>::iterator& begin,const std::vector<std::unique_ptr<Vertex>>::iterator& middle,const std::vector<std::unique_ptr<Vertex>>::iterator& end);
+    static double polar_angle(const Point2D& point);
     
-    void build(const std::vector<std::unique_ptr<Vertex>>::iterator& begin,const std::vector<std::unique_ptr<Vertex>>::iterator& end, bool split_by_x);
+    std::pair<std::shared_ptr<Edge>, std::shared_ptr<Edge>>
+    add_common_tangents(const std::vector<std::shared_ptr<Vertex>>::iterator& begin,
+                        const std::vector<std::shared_ptr<Vertex>>::iterator& middle,
+                        const std::vector<std::shared_ptr<Vertex>>::iterator& end);
+    
+    void build(const std::vector<std::shared_ptr<Vertex>>::iterator& begin,
+               const std::vector<std::shared_ptr<Vertex>>::iterator& end, bool split_by_x);
     
     // invariant for first edge:
     //          (1)
     // outer    / inner
     //  part   /   part
     //       (2)
-    void merge_triangulations(Edge* first, Edge* last);
+    void merge_triangulations(const std::shared_ptr<Edge>& first,
+                              const std::shared_ptr<Edge>& last);
     
     // ab intersects cd
-    static bool intersect(Vertex* a, Vertex* b, Vertex* c, Vertex* d) {
-        for (int i = 0; i < 2; ++i) {
-            auto straight = b->point2D - a->point2D;
-            auto to_first = c->point2D - a->point2D;
-            auto to_second = d->point2D - a->point2D;
-            if (sign(vector_production(straight, to_first)) *
-                sign(vector_production(straight, to_second)) > -1e-4) {
-                return false;
-            }
-            std::swap(a, c);
-            std::swap(b, d);
-        }
-        return true;
-    }
+    static bool intersect(std::shared_ptr<Vertex> a,
+                          std::shared_ptr<Vertex> b,
+                          std::shared_ptr<Vertex> c,
+                          std::shared_ptr<Vertex> d);
     
-    void build_stupid(const std::vector<std::unique_ptr<Vertex>>::iterator&, const std::vector<std::unique_ptr<Vertex>>::iterator&);
+    void build_stupid(const std::vector<std::shared_ptr<Vertex>>::iterator& begin,
+                      const std::vector<std::shared_ptr<Vertex>>::iterator& end);
     
-    static int sign(double x) {
-        if (x > 1e-6) {
-            return 1;
-        }
-        if (x < -1e-6) {
-            return -1;
-        }
-        return 0;
-    }
-    
-    bool try_all_flips(Edge*);
+    bool try_all_flips(const std::shared_ptr<Edge>& edge);
     
     //      B
     //     / \
     //    A__C
     //    \  /
     //     D
-    bool try_flip(Vertex*, Vertex*, Vertex*, Vertex*);
+    bool try_flip(const std::shared_ptr<Vertex>& a,
+                  const std::shared_ptr<Vertex>& b,
+                  const std::shared_ptr<Vertex>& c,
+                  const std::shared_ptr<Vertex>& d);
     
+    // Helper functions
     static double get_angle_between(const Point2D& first, const Point2D& second) {
         return std::abs(atan2(vector_production(first, second), scalar_production(first, second)));
     }
@@ -98,5 +90,6 @@ private:
     
     Graph result;
 };
+
 
 #endif /* DelaunayTriangulationBuilder_hpp */

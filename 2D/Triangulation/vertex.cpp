@@ -17,11 +17,10 @@
 
 #include "vertex.hpp"
 
-Vertex::Vertex() 
-	: edges(NULL) {}
-
-Vertex::Vertex(const Point2D& _point2D) 
-	: point2D(_point2D), edges(NULL) {}
-
-Vertex::Vertex(Point2D&& _point2D) 
-	: point2D(_point2D), edges(0) {}
+/*
+ All methods of class 'Vertex' were implemented in the header:
+        
+    ../vertex.hpp
+ 
+ since method implementations are easy and clear.
+ */
