@@ -17,39 +17,29 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef TRIANGLE_HPP_
+#define TRIANGLE_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+#include "convex2D.hpp"
 
-class EdgeNode
+class Triangle : public Convex2D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Triangle();
+	Triangle(const vector<Point2D>& points);
+	Triangle(const Point2D& a, const Point2D& b, const Point2D& c);
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	double GetSideA() const;
+	double GetSideB() const;
+	double GetSideC() const;
+
+	double Area() const;
+	bool Contains(const Point2D&) const;
+	bool Boundary(const Point2D&) const;
+	bool Intersect(const Segment2D&, Point2D&, Point2D&) const;
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*TRIANGLE_HPP_*/

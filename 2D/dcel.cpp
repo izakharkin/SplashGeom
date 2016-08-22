@@ -19,11 +19,29 @@
 */
 #include "dcel.hpp"
 
-EdgeNode::EdgeNode()
-	: edge_(), twin_(nullptr), site_(nullptr) {}
+DCEL::DCEL()
+	: edges() {}
 
-EdgeNode::EdgeNode(const Point2D& p1, const Point2D& p2)
-: edge_(p1, p2), twin_(make_shared<EdgeNode>(p2, p1)), site_(nullptr) {}
+EdgeNode::EdgeNode()
+: edge_(), twin_(nullptr), site_(nullptr), finished_(false) {}
+
+EdgeNode::EdgeNode(const Point2D& p1, const Point2D& site)
+{
+	edge_.a = p1;
+	twin_ = nullptr;
+	site_ = make_shared<Point2D>(site);
+	finished_ = false;
+}
+
+EdgeNode::EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site)
+	: edge_(p1, p2), twin_(make_shared<EdgeNode>(p2, p1)), site_(make_shared<Point2D>(site)), finished_(true) {}
+
+void EdgeNode::Finish(const Point2D& end_point)
+{
+	edge_.b = end_point;
+	twin_ = make_shared<EdgeNode>(edge_.b, edge_.a);
+	finished_ = true;
+}
 
 void DCEL::AddEdge(const EdgeNode& new_edge)
 {

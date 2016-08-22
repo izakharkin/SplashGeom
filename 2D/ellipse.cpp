@@ -17,39 +17,49 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#include "ellipse.hpp"
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+Ellipse::Ellipse()
+	: center_(), little_haxis_(0.0), big_haxis_(0.0) {}
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+Ellipse::Ellipse(const Point2D& center, double a, double b)
+	: center_(center), little_haxis_(a), big_haxis_(b) {}
 
-class EdgeNode
+string Ellipse::GetEquation() const
 {
-public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	string equation;
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
-};
 
-// Double-Connected(Linked) Edge List
-class DCEL
+
+	return equation;
+}
+
+double Ellipse::Area() const
 {
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
+	return M_PI * little_haxis_ * big_haxis_;
+}
 
-#endif /*DCEL_HPP_*/
+bool Ellipse::Contains(const Point2D&) const
+{
+	return 0;
+}
+
+bool Ellipse::Boundary(const Point2D&) const
+{
+	return 0;
+}
+
+vector<Point2D> Ellipse::GetIntersection(const Line2D&) const
+{
+	return vector<Point2D>();
+}
+
+vector<Point2D> Ellipse::GetIntersection(const Ray2D&) const
+{
+	return vector<Point2D>();
+}
+
+vector<Point2D> Ellipse::GetIntersection(const Segment2D&) const
+{
+	return vector<Point2D>();
+}

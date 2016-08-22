@@ -32,17 +32,25 @@ class Arc
 public:
 	Arc();
 	Arc(const PointEvent& focus);
+
+	double Abscissa() const; // of focus
+	double Ordinate() const; // of focus
+
+	Point2D GetIntersection(const Arc& second_arc, double line_position) const;
 private:
 	shared_ptr<Point2D> focus_;
-	double directrix_pos_;
 };
 
 class BeachNode
 {
 public:
+	BeachNode();
 	BeachNode(const Arc& arc);
+	BeachNode(const Point2D& break_point);
 private:
-	Arc arc_;
+	shared_ptr<Arc> arc_;
+	shared_ptr<Point2D> break_point_;
+	shared_ptr<BeachNode> parent_;
 	shared_ptr<BeachNode> left_node_;
 	shared_ptr<BeachNode> right_node_;
 };
@@ -54,11 +62,15 @@ public:
 
 	void AddArc(const Arc& new_arc);
 	void DeleteArc(const Arc& arc_to_del);
+//	BeachNode SearchArc(const Arc& arc_to_search) const;
+
+//	void DeleteNode(const BeachNode& node_to_del);
 
 	void HandlePointEvent(const PointEvent& point_event, DCEL& edges);
 	void HandleCircleEvent(const CircleEvent& circle_event, DCEL& edges);
 private:
 	shared_ptr<BeachNode> root_;
+	shared_ptr<BeachNode> the_leftest_leaf_;
 };
 
 #endif /*BST_HPP_*/

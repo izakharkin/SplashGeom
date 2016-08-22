@@ -17,39 +17,42 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef SEGMENT_HPP_
+#define SEGMENT_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+#include "point3D.hpp"
+#include "vector3D.hpp"
+#include "line3D.hpp"
 
-class EdgeNode
+class Segment3D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Point3D a;
+	Point3D b;
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	Segment3D();
+	Segment3D(const Point3D& point_a, const Point3D& point_b);
+
+	void Reverse();
+
+	double Length() const;
+	Point3D Center() const;
+	bool Point3DInBox(const Point3D& point) const;
+
+	Vector3D Direction() const;
+	Vector3D NormalVec() const;
+
+	bool Contains(const Point3D& point) const;
+	Point3D GetIntersection(const Segment3D& second_seg) const;
+	Point3D GetIntersection(const Line3D& line) const;
+	Point3D GetIntersection(const Ray3D& ray) const;
+
+	bool HasIntersection(const Segment3D& second_seg) const;
+	bool HasIntersection(const Line3D& line) const;
+	bool HasIntersection(const Ray3D& ray) const;
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*SEGMENT_HPP_*/

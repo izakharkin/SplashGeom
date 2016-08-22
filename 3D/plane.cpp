@@ -17,39 +17,41 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#include "plane.hpp"
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+Plane::Plane()
+	: A(0.0), B(0.0), C(0.0), D(0.0) {}
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
-
-class EdgeNode
+Plane::Plane(const Point3D& p1, const Point3D& p2, const Point3D& p3)  
 {
-public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
-
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
-};
-
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
 	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
+}
 
-#endif /*DCEL_HPP_*/
+Plane::Plane(const Point3D& point, const Vector3D& direction1, const Vector3D& direction_2) {}
+
+double Plane::PointIntoPlane(const Point3D& point) const
+{
+	return A * point.x + B * point.y + C * point.z + D;
+}
+
+int Plane::Sign(const Point3D& point) const
+{
+	double val = this->PointIntoPlane(point);
+	return (fabs(val) <= EPS ? 0 : (val > 0 ? 1 : -1));
+}
+
+Vector3D Plane::NormalVec() const
+{
+	return Vector3D(this->A, this->B, this->C);
+}
+
+double Plane::Distance(const Point3D& point) const
+{
+	return PointIntoPlane(point) / this->NormalVec().Norm();
+}
+
+bool Plane::Contains(const Point3D& point) const
+{
+	return this->Sign(point) == 0;
+}
+

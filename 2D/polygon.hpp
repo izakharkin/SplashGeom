@@ -17,39 +17,46 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef POLYGON_HPP_
+#define POLYGON_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
 #include "point2D.hpp"
+#include "vector2D.hpp"
+#include "line2D.hpp"
 #include "segment2D.hpp"
+#include "shape2D.hpp"
 
-class EdgeNode
+class Polygon : public Shape2D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Polygon();
+	Polygon(int n);
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
-};
+	Polygon(const Polygon& second_polygon);
+	void operator =(const Polygon& second_polygon);
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
+	Polygon(Polygon&& second_polygon);
+	void operator =(Polygon&& second_polygon);
+
+	Polygon(const vector<Point2D>& points);
+	void operator =(const vector<Point2D>& points);
+
+	int Size() const;
+
+	virtual double Area() const;
+	virtual bool Contains(const Point2D& point) const;
+	virtual bool Boundary(const Point2D& point) const;
 	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
+	virtual vector<Point2D> GetIntersection(const Line2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Ray2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Segment2D& segment) const override;
+
+	Polygon GetIntersection(const Polygon& second_polygon) const;
+protected:
+	vector<Point2D> vertices_;
 };
 
-#endif /*DCEL_HPP_*/
+#endif /*POLYGON_HPP_*/

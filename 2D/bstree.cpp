@@ -19,36 +19,75 @@
 */
 #include "bstree.hpp"
 
+BeachNode::BeachNode()
+: arc_(nullptr), break_point_(nullptr), parent_(nullptr), left_node_(nullptr), right_node_(nullptr) {}
+
 BeachNode::BeachNode(const Arc& arc)
-	: arc_(arc) {}
+	: arc_(make_shared<Arc>(arc)), break_point_(nullptr), parent_(nullptr), left_node_(nullptr), right_node_(nullptr) {}
+
+BeachNode::BeachNode(const Point2D& break_point)
+	: arc_(nullptr), break_point_(make_shared<Point2D>(break_point)), parent_(nullptr), left_node_(nullptr), right_node_(nullptr) {}
 
 Arc::Arc()
-: focus_(nullptr), directrix_pos_(0.0) {}
-/*
+	: focus_(nullptr) {}
+
 Arc::Arc(const PointEvent& focus)
-	: focus_(make_shared<PointEvent>(focus))
+	: focus_(make_shared<Point2D>(focus.GetPointOfEvent())) {}
+
+double Arc::Abscissa() const
 {
-	directrix_pos_ = focus_.Ordinate();
+	return this->focus_->x;
 }
-*/
+
+double Arc::Ordinate() const
+{
+	return this->focus_->y;
+}
+
+Point2D Arc::GetIntersection(const Arc& second_arc, double line_pos) const
+{
+	Point2D intersect_point;
+	double p1 = 2 * (line_pos - this->focus_->y);
+	double p2 = 2 * (line_pos - second_arc.focus_->y);
+	// solving the equation
+	double a1 = 1 / p1;
+	double a2 = 1 / p2;
+	double a = a2 - a1;
+	double b1 = -this->focus_->x / p1;
+	double b2 = -second_arc.focus_->x / p2;
+	double b = b2 - b1;
+	double c1 = pow(this->focus_->x, 2) + pow(this->focus_->y, 2) - pow(line_pos, 2) / p1;
+	double c2 = pow(second_arc.focus_->x, 2) + pow(second_arc.focus_->y, 2) - pow(line_pos, 2) / p1;
+	double c = c2 - c1;
+	double D = pow(b, 2) - 4 * a * c;
+	double x1 = (-b - sqrt(D)) / (2 * a);
+	double x2 = (-b + sqrt(D)) / (2 * a);
+	double y1 = a1 * pow(x1, 2) + b1 * x1 + c1;
+	double y2 = a1 * pow(x2, 2) + b1 * x2 + c1;
+	// we need the lower point
+	intersect_point = (y1 < y2 ? Point2D(x1, y1) : Point2D(x2, y2));
+	return intersect_point;
+}
+
 BeachSearchTree::BeachSearchTree()
-	: root_(nullptr) {}
+	: root_(nullptr), the_leftest_leaf_(nullptr) {}
 
 void BeachSearchTree::AddArc(const Arc& new_arc)
 {
-	if (!root_) {
-		root_ = make_shared<BeachNode>(BeachNode(new_arc));
-	} else if (0) {
+	if (this->root_ == nullptr) {
+		this->root_ = make_shared<BeachNode>(BeachNode(new_arc));
+	} else {
 
 	}
 }
 
 void BeachSearchTree::DeleteArc(const Arc& arc_to_del)
 {
-	if (!root_) {
+	if (root_ == nullptr) {
 		return;
-	} else if (0) {
-
+	} else {
+//		BeachNode node_to_del = this->SearchArc(arc_to_del);
+//		this->DeleteNode(node_to_del);
 	}
 }
 

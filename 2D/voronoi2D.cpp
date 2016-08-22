@@ -80,29 +80,22 @@ VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DHalfPlanes(const vector<P
 
 DCEL VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box)
 {
-	priority_queue<PointEvent> point_events(points.begin(), points.end());
-	priority_queue<CircleEvent> circle_events;
-	shared_ptr<PointEvent> cur_point_event;
-	shared_ptr<CircleEvent> cur_circle_event;
+	priority_queue<Event> events_queue(points.begin(), points.end());
+	shared_ptr<Event> cur_event;
 	BeachSearchTree beach_line;
-	bool no_circle_events = true;
 	DCEL edges;
-
-	while (!point_events.empty()) {
-		cur_point_event = make_shared<PointEvent>(point_events.top());
-		if (!circle_events.empty()) {
-			cur_circle_event = make_shared<CircleEvent>(circle_events.top());
-			no_circle_events = false;
-		}
-		if (no_circle_events || cur_point_event > cur_circle_event) {
-			beach_line.HandlePointEvent(*cur_point_event, edges);
-			point_events.pop();
+	while (!events_queue.empty()) {
+		cur_event = make_shared<Event>(events_queue.top());
+		const PointEvent *is_point_event = dynamic_cast<const PointEvent *>(cur_event.get());
+		if (is_point_event) {
+			beach_line.HandlePointEvent(*is_point_event, edges);
+			events_queue.pop();
 		} else {
-			beach_line.HandleCircleEvent(*cur_circle_event, edges);
-			circle_events.pop();
+			const CircleEvent *is_circle_event = dynamic_cast<const CircleEvent *>(cur_event.get());
+			beach_line.HandleCircleEvent(*is_circle_event, edges);
+			events_queue.pop();
 		}
 	}
-
 	return edges;
 }
 

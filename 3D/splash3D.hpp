@@ -17,39 +17,19 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef SPLASH3D_HPP_
+#define SPLASH3D_HPP_
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+#include "point3D.hpp"
+#include "vector3D.hpp"
+#include "line3D.hpp"
+#include "ray3D.hpp"
+#include "segment3D.hpp"
+#include "shape3D.hpp"
+#include "ellipsoid.hpp"
+#include "sphere.hpp"
+#include "cylinder.hpp"
+#include "polyhedron.hpp"
+#include "cube.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
-
-class EdgeNode
-{
-public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
-
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
-};
-
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*SPLASH3D_HPP_*/

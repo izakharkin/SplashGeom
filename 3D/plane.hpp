@@ -17,39 +17,43 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef PLANE_HPP_
+#define PLANE_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+#include "point3D.hpp"
+#include "vector3D.hpp"
+#include "line3D.hpp"
+#include "ray3D.hpp"
+#include "segment3D.hpp"
 
-class EdgeNode
+class Plane
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Plane();
+	Plane(const Point3D&, const Point3D&, const Point3D&);
+	Plane(const Point3D& point, const Vector3D& direction1, const Vector3D& direction2);
 
-	void Finish(const Point2D& p2);
+	double PointIntoPlane(const Point3D& point_to_insert_into_plane) const;
+	int Sign(const Point3D& point) const;
+
+	Vector3D NormalVec() const;
+
+	double Distance(const Point3D& point) const;
+	double Distance(const Line3D& second_line) const;
+
+	bool Contains(const Point3D& point) const;
+
+	Point2D GetIntersection(const Line3D& second_line) const;
+	Point2D GetIntersection(const Segment3D& segment) const;
+	Point2D GetIntersection(const Ray3D& ray) const;
 private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	double A;
+	double B;
+	double C;
+	double D;
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*PLANE_HPP_*/

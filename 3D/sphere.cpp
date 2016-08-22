@@ -17,44 +17,52 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "event.hpp"
+#include "sphere.hpp"
 
-Event::Event(const Point2D& point_of_event)
-: point_of_event_(point_of_event) {}
+Sphere::Sphere(const Point3D& center, double radius)
+	: Ellipsoid(center, radius, radius, radius) {}
 
-Point2D Event::GetPointOfEvent() const
+void Sphere::SetCenter(const Point3D& center)
 {
-	return point_of_event_;
+	center_ = center;
 }
 
-bool Event::operator <(const Event& second_event) const
+Point3D Sphere::GetCenter() const
 {
-	return this->point_of_event_.y > second_event.point_of_event_.y
-	   || (this->point_of_event_.y - second_event.point_of_event_.y) <= EPS && this->point_of_event_.x < second_event.point_of_event_.x;
+	return center_;
 }
 
-PointEvent::PointEvent(const Point2D& site)
-	: Event(site) {}
-
-double PointEvent::Abscissa() const
+double Sphere::Volume() const
 {
-	return point_of_event_.x;
+	return Ellipsoid::Volume();
 }
 
-double PointEvent::Ordinate() const
+double Sphere::SurfaceArea() const
 {
-	return point_of_event_.y;
+	return Ellipsoid::SurfaceArea();
 }
 
-CircleEvent::CircleEvent(const Point2D& new_voro_vertex)
-	: Event(new_voro_vertex) {}
-
-double CircleEvent::Abscissa() const
+bool Sphere::Contains(const Point3D& point) const
 {
-	return point_of_event_.x;
+	return Ellipsoid::Contains(point);
 }
 
-double CircleEvent::Ordinate() const
+bool Sphere::Boundary(const Point3D& point) const
 {
-	return point_of_event_.y;
+	return (point.l2_distance(center_) == ax1_);
+}
+
+vector<Point3D> Sphere::GetIntersection(const Line3D& line) const
+{
+	return vector<Point3D>();
+}
+
+vector<Point3D> Sphere::GetIntersection(const Ray3D& ray) const
+{
+	return vector<Point3D>();
+}
+
+vector<Point3D> Sphere::GetIntersection(const Segment3D& segment) const
+{
+	return vector<Point3D>();
 }

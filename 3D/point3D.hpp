@@ -17,39 +17,39 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef POINT3D_HPP_
+#define POINT3D_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
-
-class EdgeNode
+class Point3D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	double x;
+	double y;
+	double z;
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	Point3D();
+	Point3D(double _x, double _y, double _z);
+
+	double l1_distance(const Point3D&) const;
+	double l2_distance(const Point3D&) const;
+
+	Point3D operator + (const Point3D&) const;
+	Point3D operator - (const Point3D&) const;
+	Point3D operator * (double) const;
+	Point3D operator / (double) const;
+
+	bool operator == (const Point3D&) const;
+	bool operator != (const Point3D&) const;
+	bool operator < (const Point3D&) const;
+
+	friend std::ostream& operator << (std::ostream&, const Point3D&);
+	friend std::istream& operator >> (std::istream&, Point3D&);
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
+const Point3D kInfPoint3D = Point3D(INF, INF, INF);
+const Point3D kNegInfPoint3D = Point3D(-INF, -INF, -INF);
 
-#endif /*DCEL_HPP_*/
+#endif /*POINT3D_HPP_*/

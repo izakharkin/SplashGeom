@@ -17,39 +17,42 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef ELLIPSOID_HPP_
+#define ELLIPSOID_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+#include "point3D.hpp"
+#include "vector3D.hpp"
+#include "segment3D.hpp"
+#include "shape3D.hpp"
 
-class EdgeNode
+class Ellipsoid : public Shape3D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Ellipsoid();
+	Ellipsoid(const Point3D& center, double a, double b, double c);
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	void SetCenter(const Point3D& new_center);
+
+	Point3D GetCenter() const;
+	double GetRadius() const;
+
+	double SurfaceArea() const;
+	double Volume() const;
+
+	bool Contains(const Point3D& point) const;
+	bool Boundary(const Point3D& point) const;
+
+	virtual vector<Point3D> GetIntersection(const Line3D& line) const override;
+	virtual vector<Point3D> GetIntersection(const Ray3D& ray) const override;
+	virtual vector<Point3D> GetIntersection(const Segment3D& segment) const override;
+protected:
+	Point3D center_;
+	double ax1_;
+	double ax2_;
+	double ax3_;
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*ELLIPSOID_HPP_*/

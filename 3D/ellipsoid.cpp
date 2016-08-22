@@ -17,44 +17,52 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "event.hpp"
+#include "ellipsoid.hpp"
 
-Event::Event(const Point2D& point_of_event)
-: point_of_event_(point_of_event) {}
+Ellipsoid::Ellipsoid(const Point3D& center, double a, double b, double c) 
+	: center_(center), ax1_(a), ax2_(b), ax3_(c) {}
 
-Point2D Event::GetPointOfEvent() const
+void Ellipsoid::SetCenter(const Point3D& center) 
 {
-	return point_of_event_;
+	center_ = center;
 }
 
-bool Event::operator <(const Event& second_event) const
+Point3D Ellipsoid::GetCenter() const 
 {
-	return this->point_of_event_.y > second_event.point_of_event_.y
-	   || (this->point_of_event_.y - second_event.point_of_event_.y) <= EPS && this->point_of_event_.x < second_event.point_of_event_.x;
+	return center_;
 }
 
-PointEvent::PointEvent(const Point2D& site)
-	: Event(site) {}
-
-double PointEvent::Abscissa() const
+double Ellipsoid::Volume() const 
 {
-	return point_of_event_.x;
+	return (4 / 3) * ax1_ * ax2_ * ax3_ * M_PI;
 }
 
-double PointEvent::Ordinate() const
+double Ellipsoid::SurfaceArea() const 
 {
-	return point_of_event_.y;
+	return M_PI * M_E * 4 / 7.;
 }
 
-CircleEvent::CircleEvent(const Point2D& new_voro_vertex)
-	: Event(new_voro_vertex) {}
-
-double CircleEvent::Abscissa() const
+bool Ellipsoid::Contains(const Point3D&) const
 {
-	return point_of_event_.x;
+	return 0;
 }
 
-double CircleEvent::Ordinate() const
+bool Ellipsoid::Boundary(const Point3D&) const
 {
-	return point_of_event_.y;
+	return 0;
+}
+
+vector<Point3D> Ellipsoid::GetIntersection(const Line3D& line) const
+{
+	return vector<Point3D>();
+}
+
+vector<Point3D> Ellipsoid::GetIntersection(const Ray3D& ray) const
+{
+	return vector<Point3D>();
+}
+
+vector<Point3D> Ellipsoid::GetIntersection(const Segment3D& segment) const
+{
+	return vector<Point3D>();
 }

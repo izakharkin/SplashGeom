@@ -17,39 +17,25 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef SHAPE2D_HPP_
+#define SHAPE2D_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
-
-class EdgeNode
+class Shape2D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	virtual double Area() const = 0;
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	virtual bool Contains(const Point2D&) const = 0;
+	virtual bool Boundary(const Point2D&) const = 0;
+
+	virtual vector<Point2D> GetIntersection(const Line2D&) const = 0;
+	virtual vector<Point2D> GetIntersection(const Ray2D&) const = 0;
+	virtual vector<Point2D> GetIntersection(const Segment2D&) const = 0;
+
+	virtual ~Shape2D() {}
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
-
-#endif /*DCEL_HPP_*/
+#endif /*SHAPE2D_HPP_*/

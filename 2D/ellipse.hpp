@@ -17,39 +17,44 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef ELLIPSE_HPP_
+#define ELLIPSE_HPP_
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
 #include "point2D.hpp"
 #include "segment2D.hpp"
+#include "shape2D.hpp"
 
-class EdgeNode
+class Ellipse : public Shape2D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Ellipse();
+	Ellipse(const Point2D& center, double a, double b);
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
-};
+	void SetLittleAx(double);
+	void SetBigAx(double);
+	void SetCenter(const Point2D&);
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
+	double GetLittleAx() const;
+	double GetBigAx() const;
+	Point2D GetCenter() const;
+
+	string GetEquation() const;
+
+	double Area() const;
+	bool Length() const;
+	bool Contains(const Point2D&) const;
+	bool Boundary(const Point2D&) const;
 	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
+	virtual vector<Point2D> GetIntersection(const Line2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Ray2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Segment2D&) const override;
+protected:
+	Point2D center_;
+	double little_haxis_;
+	double big_haxis_;
 };
 
-#endif /*DCEL_HPP_*/
+#endif /*ELLIPSE_HPP_*/

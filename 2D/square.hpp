@@ -17,39 +17,30 @@
 	You should have received a copy of the GNU General Public License
 	along with Splash. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef DCEL_HPP_
-#define DCEL_HPP_
+#ifndef SQUARE_HPP
+#define SQUARE_HPP
 
 #include "../splash_forward.hpp"
 #include "../splash_utils.hpp"
 
-#include "point2D.hpp"
-#include "segment2D.hpp"
+#include "convex2D.hpp"
 
-class EdgeNode
+class Square : public Convex2D
 {
 public:
-	EdgeNode();
-	EdgeNode(const Point2D& p1, const Point2D& site);
-	EdgeNode(const Point2D& p1, const Point2D& p2, const Point2D& site);
+	Square();
+	Square(const vector<Point2D>& points);
+	Square(const Point2D& p1, const Point2D& p2, const Point2D& p3, const Point2D& p4);
 
-	void Finish(const Point2D& p2);
-private:
-	Segment2D edge_;
-	shared_ptr<EdgeNode> twin_;
-	shared_ptr<Point2D> site_;
-	bool finished_;
+	double Area() const;
+	bool Contains(const Point2D&) const;
+	bool Boundary(const Point2D&) const;
+
+	virtual vector<Point2D> GetIntersection(const Line2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Ray2D&) const override;
+	virtual vector<Point2D> GetIntersection(const Segment2D&) const override;
 };
 
-// Double-Connected(Linked) Edge List
-class DCEL
-{
-public:
-	DCEL();
-	
-	void AddEdge(const EdgeNode& new_edge);
-private:
-	list<EdgeNode> edges;
-};
+const Rectangle kMaxSquare = Rectangle(Point2D(INF, INF), Point2D(-INF, INF), Point2D(-INF, -INF), Point2D(INF, -INF));
 
-#endif /*DCEL_HPP_*/
+#endif /*SQUARE_HPP*/
