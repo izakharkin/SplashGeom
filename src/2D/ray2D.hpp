@@ -36,6 +36,7 @@ public:
 
 	Ray2D();
 	Ray2D(const Point2D& pos, const Vector2D& dir);
+	Ray2D(const Point2D& pos, const Point2D& point);
 
 	Vector2D Direction() const;
 	Vector2D NormalVec() const;

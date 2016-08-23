@@ -41,10 +41,9 @@ public:
 	double GetBigAx() const;
 	Point2D GetCenter() const;
 
-	string GetEquation() const;
-
 	double Area() const;
 	bool Length() const;
+
 	bool Contains(const Point2D&) const;
 	bool Boundary(const Point2D&) const;
 	

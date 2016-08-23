@@ -25,6 +25,9 @@ Ray2D::Ray2D()
 Ray2D::Ray2D(const Point2D& pos, const Vector2D& dir)
 	: pos_(pos), dir_(make_shared<Vector2D>(dir)) {}
 
+Ray2D::Ray2D(const Point2D& pos, const Point2D& point)
+	: pos_(pos), dir_(make_shared<Vector2D>(pos, point)) {}
+
 Vector2D Ray2D::Direction() const
 {
 	return *dir_;

@@ -25,15 +25,6 @@ Ellipse::Ellipse()
 Ellipse::Ellipse(const Point2D& center, double a, double b)
 	: center_(center), little_haxis_(a), big_haxis_(b) {}
 
-string Ellipse::GetEquation() const
-{
-	string equation;
-
-
-
-	return equation;
-}
-
 double Ellipse::Area() const
 {
 	return M_PI * little_haxis_ * big_haxis_;

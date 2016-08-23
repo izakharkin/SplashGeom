@@ -27,6 +27,7 @@ class Shape2D
 {
 public:
 	virtual double Area() const = 0;
+	virtual double Perimeter() const = 0;
 
 	virtual bool Contains(const Point2D&) const = 0;
 	virtual bool Boundary(const Point2D&) const = 0;

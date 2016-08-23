@@ -63,20 +63,6 @@ Vector2D Line2D::NormalVec() const
 	return Vector2D(this->A, this->B);
 }
 
-Segment2D Line2D::ToSegment() const
-{
-	Segment2D res_segment;
-
-	return res_segment;
-}
-
-Ray2D Line2D::ToRay() const
-{
-	Ray2D res_ray;
-
-	return res_ray;
-}
-
 double Line2D::Distance(const Point2D& point) const
 {
 	return PointIntoLine2D(point) / this->NormalVec().Norm();

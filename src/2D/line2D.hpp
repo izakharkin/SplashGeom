@@ -42,9 +42,6 @@ public:
 	Vector2D Direction() const;
 	Vector2D NormalVec() const;
 
-	Segment2D ToSegment() const;
-	Ray2D ToRay() const;
-
 	double Distance(const Point2D& point) const;
 
 	bool Contains(const Point2D& point) const;

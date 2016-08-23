@@ -42,11 +42,11 @@ public:
 	Voronoi2DLocus(const Convex2D& locus, const Point2D& site);
 
 	Convex2D GetRegion();
-
-	friend class VoronoiDiagram2D;
 private:
 	shared_ptr<Convex2D> region_;
 	Point2D site_;
+
+friend class VoronoiDiagram2D;
 };
 
 Convex2D GetHalfPlanesIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box);
@@ -57,12 +57,14 @@ public:
 	VoronoiDiagram2D();
 	VoronoiDiagram2D(const vector<Point2D>& points);
 
-	vector<Voronoi2DLocus> GetDiagram() const;
+	vector<Voronoi2DLocus> GetDiagramLocuses() const;
+	DCEL GetDiagramDCEL() const;
 
 	VoronoiDiagram2D MakeVoronoiDiagram2DHalfPlanes(const vector<Point2D>& points, const Rectangle& border_box);
-	DCEL MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box);
+	VoronoiDiagram2D MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box);
 private:
 	vector<Voronoi2DLocus> diagram_;
+	DCEL dcel_;
 
 	Voronoi2DLocus MakeVoronoi2DLocus(const Point2D& cur_point, const vector<Point2D>& points, const Rectangle& border_box);
 };

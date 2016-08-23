@@ -65,18 +65,29 @@ int Polygon::Size() const
 double Polygon::Area() const 
 {
 	double area = 0;
-	int num_of_vertices = vertices_.size();
-	for (int i = 0; i < num_of_vertices; ++i) {
-		int j = (i + 1) % num_of_vertices;
+	int sz = this->Size();
+	for (int i = 0; i < sz; ++i) {
+		int j = (i + 1) % sz;
 		area += Vector2D(vertices_[i]).OrientedCCW(Vector2D(vertices_[j] - vertices_[i]));
 	}
 	return fabs(area / 2.0);
 }
 
+double Polygon::Perimeter() const
+{
+	double perimeter = 0;
+	int sz = this->Size();
+	for (int i = 0; i < sz; ++i) {
+		int j = (i + 1) % sz;
+		perimeter += Segment2D(vertices_[i], vertices_[j]).Length();
+	}
+	return perimeter;
+}
+
 bool Polygon::Contains(const Point2D& point) const
 {
 	int num_of_cross_sides = 0;
-	size_t sz = vertices_.size();
+	size_t sz = this->Size();
 	Ray2D checking_ray(point, Vector2D(1, 0));
 	bool is_on_border = false;
 	for (size_t i = 0; i < sz && !is_on_border; ++i) {
@@ -89,7 +100,7 @@ bool Polygon::Contains(const Point2D& point) const
 			num_of_cross_sides++;
 		}
 	}
-	return num_of_cross_sides % 2 == 0;
+	return num_of_cross_sides % 2 == 1;
 }
 
 bool Polygon::Boundary(const Point2D & point) const
@@ -106,17 +117,47 @@ bool Polygon::Boundary(const Point2D & point) const
 	return is_on_border;
 }
 
-vector<Point2D> Polygon::GetIntersection(const Line2D&) const
+vector<Point2D> Polygon::GetIntersection(const Line2D& line) const
 {
-	return vector<Point2D>();
+	vector<Point2D> intersect_points;
+	size_t sz = this->Size();
+	for (size_t i = 0; i < sz; ++i) {
+		int j = (i + 1) % sz;
+		Segment2D cur_side(vertices_[i], vertices_[j]);
+		Point2D cur_intersection = line.GetIntersection(cur_side);
+		if (cur_intersection != kInfPoint2D) {
+			intersect_points.push_back(cur_intersection);
+		}
+	}
+	return intersect_points;
 }
 
-vector<Point2D> Polygon::GetIntersection(const Ray2D&) const
+vector<Point2D> Polygon::GetIntersection(const Ray2D& ray) const
 {
-	return vector<Point2D>();
+	vector<Point2D> intersect_points;
+	size_t sz = this->Size();
+	for (size_t i = 0; i < sz; ++i) {
+		int j = (i + 1) % sz;
+		Segment2D cur_side(vertices_[i], vertices_[j]);
+		Point2D cur_intersection = ray.GetIntersection(cur_side);
+		if (cur_intersection != kInfPoint2D) {
+			intersect_points.push_back(cur_intersection);
+		}
+	}
+	return intersect_points;
 }
 
-vector<Point2D> Polygon::GetIntersection(const Segment2D&) const
+vector<Point2D> Polygon::GetIntersection(const Segment2D& segment) const
 {
-	return vector<Point2D>();
+	vector<Point2D> intersect_points;
+	size_t sz = this->Size();
+	for (size_t i = 0; i < sz; ++i) {
+		int j = (i + 1) % sz;
+		Segment2D cur_side(vertices_[i], vertices_[j]);
+		Point2D cur_intersection = segment.GetIntersection(cur_side);
+		if (cur_intersection != kInfPoint2D) {
+			intersect_points.push_back(cur_intersection);
+		}
+	}
+	return intersect_points;
 }

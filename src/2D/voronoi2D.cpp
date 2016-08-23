@@ -38,6 +38,16 @@ VoronoiDiagram2D::VoronoiDiagram2D(const vector<Point2D>& points)
 	MakeVoronoiDiagram2DHalfPlanes(points, kMaxRectangle);
 }
 
+vector <Voronoi2DLocus> VoronoiDiagram2D::GetDiagramLocuses() const
+{
+	return diagram_;
+}
+
+DCEL VoronoiDiagram2D::GetDiagramDCEL() const
+{
+	return dcel_;
+}
+
 Convex2D GetHalfPlanesIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box)
 {
 	if (halfplanes.size() == 1) {
@@ -73,12 +83,12 @@ VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DHalfPlanes(const vector<P
 	Voronoi2DLocus cur_locus;
 	for (size_t i = 0; i < points.size(); ++i) {
 		cur_locus = MakeVoronoi2DLocus(points[i], points, border_box);
-		diagram_.push_back(cur_locus);
+		this->diagram_.push_back(cur_locus);
 	}
 	return *this;
 }
 
-DCEL VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box)
+VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points, const Rectangle& border_box)
 {
 	priority_queue<Event> events_queue(points.begin(), points.end());
 	shared_ptr<Event> cur_event;
@@ -86,20 +96,17 @@ DCEL VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Point2D>& points
 	DCEL edges;
 	while (!events_queue.empty()) {
 		cur_event = make_shared<Event>(events_queue.top());
-		const PointEvent *is_point_event = dynamic_cast<const PointEvent *>(cur_event.get());
+		const shared_ptr<PointEvent> is_point_event(const_cast<PointEvent *>(dynamic_cast<const PointEvent *>(cur_event.get())));
 		if (is_point_event) {
-			beach_line.HandlePointEvent(*is_point_event, edges);
 			events_queue.pop();
+			beach_line.HandlePointEvent(*is_point_event, border_box, events_queue, edges);
 		} else {
-			const CircleEvent *is_circle_event = dynamic_cast<const CircleEvent *>(cur_event.get());
-			beach_line.HandleCircleEvent(*is_circle_event, edges);
+			const shared_ptr<CircleEvent> is_circle_event(const_cast<CircleEvent *>(dynamic_cast<const CircleEvent *>(cur_event.get())));
 			events_queue.pop();
+			beach_line.HandleCircleEvent(*is_circle_event, border_box, events_queue, edges);
 		}
 	}
-	return edges;
+	edges.Finish(border_box);
+	this->dcel_ = edges;
+	return *this;
 }
-
-// Notes:
-//		shared_ptr<PointEvent> which_event;
-// 		const shared_ptr<PointEvent> which_event(dynamic_cast<PointEvent*>(cur_event.get()));
-//		result_diagram.diagram = MakeDiagramFromList();

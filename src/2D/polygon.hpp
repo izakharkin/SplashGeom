@@ -46,7 +46,9 @@ public:
 
 	int Size() const;
 
-	virtual double Area() const;
+	double Area() const;
+	double Perimeter() const;
+
 	virtual bool Contains(const Point2D& point) const;
 	virtual bool Boundary(const Point2D& point) const;
 	

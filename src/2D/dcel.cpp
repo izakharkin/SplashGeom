@@ -47,3 +47,12 @@ void DCEL::AddEdge(const EdgeNode& new_edge)
 {
 	edges.push_back(new_edge);
 }
+
+void DCEL::Finish(const Rectangle& border_box)
+{
+	for (auto i : edges) {
+		if (i.finished_ == false) {
+			// pointer to the arc
+		}
+	}
+}

@@ -242,24 +242,29 @@ bool Convex2D::Contains(const Point2D& point) const
 	return contains;
 }
 
-bool Convex2D::Boundary(const Point2D& p) const
+double Convex2D::Perimeter() const
 {
-	return 0;
+	return Polygon::Perimeter();
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Line2D&) const
+bool Convex2D::Boundary(const Point2D& point) const
 {
-	return vector<Point2D>();
+	return Polygon::Boundary(point);
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Ray2D&) const
+vector<Point2D> Convex2D::GetIntersection(const Line2D& line) const
 {
-	return vector<Point2D>();
+	return Polygon::GetIntersection(line);
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Segment2D&) const
+vector<Point2D> Convex2D::GetIntersection(const Ray2D& ray) const
 {
-	return vector<Point2D>();
+	return Polygon::GetIntersection(ray);
+}
+
+vector<Point2D> Convex2D::GetIntersection(const Segment2D& segment) const
+{
+	return Polygon::GetIntersection(segment);
 }
 
 // returns number of case

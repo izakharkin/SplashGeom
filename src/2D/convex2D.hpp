@@ -34,11 +34,11 @@ public:
 	Convex2D(const Convex2D& second_polygon);
 	void operator =(const Convex2D& second_polygon);
 
-	Convex2D(Convex2D&& second_polygon);
-	void operator =(Convex2D&& second_polygon);
-
 	Convex2D(const vector<Point2D>& points);
 	void operator =(const vector<Point2D>& points);
+
+	Convex2D(Convex2D&& second_polygon);
+	void operator =(Convex2D&& second_polygon);
 
 	void AddVertex(const Point2D& new_vertex);
 
@@ -57,6 +57,8 @@ public:
 	Convex2D MakeConvexHullJarvis(const vector<Point2D>& points);
 
 	double Area() const;
+	double Perimeter() const;
+
 	bool Contains(const Point2D&) const;
 	bool Boundary(const Point2D&) const;
 	
@@ -68,7 +70,7 @@ public:
 private:
 	size_t cur_vertex_ind;
 };
-
+// non-member functions for .GetIntersectionalConvex()
 int EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge);
 char WhichEdgeIsInside(const Segment2D& first_edge, const Segment2D& second_edge);
 char Moving(const Segment2D& first_edge, const Segment2D& second_edge, bool state, Convex2D& result_polygon);

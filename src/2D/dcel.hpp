@@ -26,6 +26,8 @@
 #include "point2D.hpp"
 #include "segment2D.hpp"
 
+class DCEL;
+
 class EdgeNode
 {
 public:
@@ -39,6 +41,8 @@ private:
 	shared_ptr<EdgeNode> twin_;
 	shared_ptr<Point2D> site_;
 	bool finished_;
+
+friend class DCEL;
 };
 
 // Double-Connected(Linked) Edge List
@@ -48,6 +52,8 @@ public:
 	DCEL();
 	
 	void AddEdge(const EdgeNode& new_edge);
+
+	void Finish(const Rectangle& border_box);
 private:
 	list<EdgeNode> edges;
 };

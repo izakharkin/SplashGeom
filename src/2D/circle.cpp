@@ -24,15 +24,33 @@ Circle::Circle()
 
 Circle::Circle(const Point2D& center, double radius)
 	: Ellipse(center, radius, radius) {}
+/*
+Circle::Circle(const Circle& second_circle)
+: center_(second_circle.center_), little_haxis_(second_circle.little_haxis_), big_haxis_(second_circle.big_haxis_) {}
 
+void Circle::operator = (const Circle& second_circle)
+{
+
+}
+
+Circle::Circle(Circle&& second_circle)
+{
+
+}
+
+void Circle::operator = (Circle&& second_circle)
+{
+
+}
+*/
 Circle::Circle(const Point2D& p1, const Point2D& p2, const Point2D& p3)
 {
 	Segment2D first_segment(p1, p2);
 	Segment2D second_segment(p2, p3);
 	Line2D first_perpendicular(first_segment.GetCenter(), first_segment.NormalVec());
 	Line2D second_perpendicular(second_segment.GetCenter(), second_segment.NormalVec());
-	center_ = first_perpendicular.GetIntersection(second_perpendicular);
-	little_haxis_ = big_haxis_ = center_.l2_distance(p1);
+	this->center_ = first_perpendicular.GetIntersection(second_perpendicular);
+	this->little_haxis_ = this->big_haxis_ = center_.l2_distance(p1);
 }
 
 void Circle::SetCenter(const Point2D& new_center)

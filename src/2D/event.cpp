@@ -30,7 +30,7 @@ Point2D Event::GetPointOfEvent() const
 bool Event::operator <(const Event& second_event) const
 {
 	return this->point_of_event_.y > second_event.point_of_event_.y
-	   || (this->point_of_event_.y - second_event.point_of_event_.y) <= EPS && this->point_of_event_.x < second_event.point_of_event_.x;
+	   || fabs(this->point_of_event_.y - second_event.point_of_event_.y) <= EPS && this->point_of_event_.x < second_event.point_of_event_.x;
 }
 
 PointEvent::PointEvent(const Point2D& site)
@@ -46,8 +46,8 @@ double PointEvent::Ordinate() const
 	return point_of_event_.y;
 }
 
-CircleEvent::CircleEvent(const Point2D& new_voro_vertex)
-	: Event(new_voro_vertex) {}
+CircleEvent::CircleEvent(const Point2D& new_voronoi_vertex)
+	: Event(new_voronoi_vertex) {}
 
 double CircleEvent::Abscissa() const
 {

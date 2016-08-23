@@ -35,14 +35,6 @@ protected:
 	Point2D point_of_event_;
 };
 
-class PointOrder
-{
-public:
-	bool operator() (const Point2D& first_point, const Point2D& second_point) {
-		return first_point.y > second_point.y || (first_point.y - second_point.y) <= EPS && first_point.x < second_point.x;
-	}
-};
-
 class PointEvent : public Event
 {
 public:
@@ -55,7 +47,7 @@ public:
 class CircleEvent : public Event
 {
 public:
-	CircleEvent(const Point2D& new_voro_vertex);
+	CircleEvent(const Point2D& new_voronoi_vertex);
 
 	double Abscissa() const;
 	double Ordinate() const;
