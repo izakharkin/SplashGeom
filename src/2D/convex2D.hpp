@@ -53,12 +53,10 @@ public:
 	vector<Point2D> GetVertices() const;
 	vector<Segment2D> GetEdges() const;
 
-	Convex2D MakeConvexHullGrehem(const vector<Point2D>& points);
-	Convex2D MakeConvexHullJarvis(const vector<Point2D>& points);
+	vector<Point2D> MakeConvexHullGrehem(const vector<Point2D>& points);
+	vector<Point2D> MakeConvexHullJarvis(const vector<Point2D>& points);
 
 	double Area() const;
-	double Perimeter() const;
-
 	bool Contains(const Point2D&) const;
 	bool Boundary(const Point2D&) const;
 	

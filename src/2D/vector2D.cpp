@@ -107,6 +107,11 @@ Vector2D Vector2D::Ortopair() const
 	return Vector2D(-x2, x1);
 }
 
+double Vector2D::Length() const
+{
+	return sqrt(this->x1 * this->x1 + this->x2 * this->x2);
+}
+
 Point2D operator + (const Point2D& point, const Vector2D& vec)
 {
 	return Point2D(point.x + vec.x1, point.y + vec.x2);

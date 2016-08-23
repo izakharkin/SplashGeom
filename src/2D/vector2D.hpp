@@ -63,6 +63,8 @@ public:
 	// Complexity: O(1)
 	Vector2D Ortopair() const;
 
+	double Length() const;
+
 	friend Point2D operator + (const Point2D& point_for_add, const Vector2D& vec_to_add);
 };
 

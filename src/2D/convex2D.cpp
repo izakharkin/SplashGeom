@@ -43,6 +43,8 @@ void Convex2D::operator =(const vector<Point2D>& points)
 	cur_vertex_ind = 0;
 }
 
+
+
 Convex2D::Convex2D(Convex2D&& second_polygon)
 {
 	vertices_ = std::move(second_polygon.vertices_);
@@ -105,7 +107,7 @@ vector<Segment2D> Convex2D::GetEdges() const
 	return edges;
 }
 
-Convex2D Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
+vector<Point2D> Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
 {
 	this->vertices_ = points;
 	Point2D p0 = vertices_[0];
@@ -113,7 +115,7 @@ Convex2D Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
 
 	for (size_t i = 1; i < vertices_.size(); ++i)
 	{
-		if (p0.y > vertices_[i].y || (p0.y == vertices_[i].y && p0.x < vertices_[i].x)) 
+		if (p0.y > vertices_[i].y || (p0.y == vertices_[i].y && p0.x < vertices_[i].x))
 		{
 			p0 = vertices_[i];
 			position = i;
@@ -122,6 +124,7 @@ Convex2D Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
 
 	Point2D center;
 	vertices_.erase(vertices_.begin() + position);
+
 	sort(vertices_.begin(), vertices_.end(), [&p0](Point2D a, Point2D b)
 	{
 		double distance_p0_a = p0.l2_distance(a);
@@ -141,7 +144,7 @@ Convex2D Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
 	size_t i = 0;
 	while (i < vertices_.size())
 	{
-		if ((vertices_[i].x - convex_hull[convex_hull.size() - 2].x) * (convex_hull[convex_hull.size() - 1].y - convex_hull[convex_hull.size() - 2].y) 
+		if ((vertices_[i].x - convex_hull[convex_hull.size() - 2].x) * (convex_hull[convex_hull.size() - 1].y - convex_hull[convex_hull.size() - 2].y)
 			- (vertices_[i].y - convex_hull[convex_hull.size() - 2].y) * (convex_hull[convex_hull.size() - 1].x - convex_hull[convex_hull.size() - 2].x) < 0)
 		{
 			convex_hull.push_back(vertices_[i]);
@@ -151,11 +154,10 @@ Convex2D Convex2D::MakeConvexHullGrehem(const vector<Point2D>& points)
 			convex_hull.pop_back();
 	}
 	convex_hull.pop_back();
-
-	return std::move(*this);
+	return convex_hull;
 }
 
-Convex2D Convex2D::MakeConvexHullJarvis(const vector<Point2D>& points)
+vector<Point2D> Convex2D::MakeConvexHullJarvis(const vector<Point2D>& points)
 {
 	this->vertices_ = points;
 	Point2D p0 = vertices_[0];
@@ -168,29 +170,34 @@ Convex2D Convex2D::MakeConvexHullJarvis(const vector<Point2D>& points)
 			p0 = vertices_[i];
 			position_p0 = i;
 		}
-
 	}
+
 	vector <Point2D> convex_hull;
 	convex_hull.push_back(p0);
 	vertices_[position_p0] = vertices_[0];
 	vertices_[0] = convex_hull[0];
+
 	int cur_index = 0;
 	int min = 1;
 	bool flag = true;
-	double vect = 0;
+	double vect_comp = 0.0;
+
 	while (flag)
 	{
 		for (size_t i = 1; i < vertices_.size(); ++i)
 		{
-			vect = (vertices_[min].x - convex_hull[cur_index].x) * (vertices_[i].y - convex_hull[cur_index].y) - (vertices_[i].x - convex_hull[cur_index].x) * (vertices_[min].y - convex_hull[cur_index].y);
-			if (vect < 0 || (vect == 0 &&
-				((convex_hull[cur_index].x - vertices_[min].x) * (convex_hull[cur_index].x - vertices_[min].x) + (convex_hull[cur_index].y - vertices_[min].y) * (convex_hull[cur_index].y - vertices_[min].y) <
-				(convex_hull[cur_index].x - vertices_[i].x) * (convex_hull[cur_index].x - vertices_[i].x) + (convex_hull[cur_index].y - vertices_[i].y) * (convex_hull[cur_index].y - vertices_[i].y))))
+			Vector2D first_vect(vertices_[min].x - convex_hull[cur_index].x, vertices_[min].y - convex_hull[cur_index].y);
+			Vector2D second_vect(vertices_[i].x - convex_hull[cur_index].x, vertices_[i].y - convex_hull[cur_index].y);
+
+			vect_comp = first_vect.OrientedCCW(second_vect);
+			if (vect_comp < 0 || (vect_comp == 0 && first_vect.Length() < second_vect.Length()))
 				min = i;
 		}
+
 		cur_index++;
 		convex_hull.push_back(vertices_[min]);
 		min = 0;
+
 		if (convex_hull[cur_index] == convex_hull[0])
 		{
 			flag = false;
@@ -198,7 +205,7 @@ Convex2D Convex2D::MakeConvexHullJarvis(const vector<Point2D>& points)
 		}
 	}
 
-	return std::move(*this);
+	return convex_hull;
 }
 
 double Convex2D::Area() const
@@ -242,29 +249,24 @@ bool Convex2D::Contains(const Point2D& point) const
 	return contains;
 }
 
-double Convex2D::Perimeter() const
+bool Convex2D::Boundary(const Point2D& p) const
 {
-	return Polygon::Perimeter();
+	return 0;
 }
 
-bool Convex2D::Boundary(const Point2D& point) const
+vector<Point2D> Convex2D::GetIntersection(const Line2D&) const
 {
-	return Polygon::Boundary(point);
+	return vector<Point2D>();
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Line2D& line) const
+vector<Point2D> Convex2D::GetIntersection(const Ray2D&) const
 {
-	return Polygon::GetIntersection(line);
+	return vector<Point2D>();
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Ray2D& ray) const
+vector<Point2D> Convex2D::GetIntersection(const Segment2D&) const
 {
-	return Polygon::GetIntersection(ray);
-}
-
-vector<Point2D> Convex2D::GetIntersection(const Segment2D& segment) const
-{
-	return Polygon::GetIntersection(segment);
+	return vector<Point2D>();
 }
 
 // returns number of case
