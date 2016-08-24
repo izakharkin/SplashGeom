@@ -55,3 +55,12 @@ bool Plane::Contains(const Point3D& point) const
 	return this->Sign(point) == 0;
 }
 
+Point3D Plane::GetIntersection(const Line3D& second_line) const {
+    return Point3D();
+}
+Point3D Plane::GetIntersection(const Segment3D& segment) const {
+    return Point3D();
+}
+Point3D Plane::GetIntersection(const Ray3D& ray) const {
+    return Point3D();
+}

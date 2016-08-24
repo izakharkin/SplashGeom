@@ -22,6 +22,7 @@
 Ellipsoid::Ellipsoid(const Point3D& center, double a, double b, double c) 
 	: center_(center), ax1_(a), ax2_(b), ax3_(c) {}
 
+
 void Ellipsoid::SetCenter(const Point3D& center) 
 {
 	center_ = center;
@@ -39,30 +40,17 @@ double Ellipsoid::Volume() const
 
 double Ellipsoid::SurfaceArea() const 
 {
-	return M_PI * M_E * 4 / 7.;
+    double p = 1.6075;
+    return 4 * M_PI * pow(((pow(ax1_,p)*pow(ax2_,p)+pow(ax1_, p)*pow(ax3_, p)+pow(ax2_,p)*pow(ax3_,p))/3), (1/p));
 }
 
-bool Ellipsoid::Contains(const Point3D&) const
+bool Ellipsoid::Contains(const Point3D& point) const
 {
-	return 0;
+	// Sinse an ellipsoid is a spherical object
+    return this->Boundary(point);
 }
 
-bool Ellipsoid::Boundary(const Point3D&) const
+bool Ellipsoid::Boundary(const Point3D& point) const
 {
-	return 0;
-}
-
-vector<Point3D> Ellipsoid::GetIntersection(const Line3D& line) const
-{
-	return vector<Point3D>();
-}
-
-vector<Point3D> Ellipsoid::GetIntersection(const Ray3D& ray) const
-{
-	return vector<Point3D>();
-}
-
-vector<Point3D> Ellipsoid::GetIntersection(const Segment3D& segment) const
-{
-	return vector<Point3D>();
+    return fabs(point.x * point.x / ax1_ / ax1_ + point.y * point.y / ax2_ / ax2_ + point.z * point.z / ax3_ / ax3_ - 1) < EPS;
 }
