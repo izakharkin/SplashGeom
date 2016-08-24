@@ -41,12 +41,14 @@ public:
 	int Sign(const Point3D& point) const;
 	Vector3D Direction() const;
 	Vector3D NormalVec() const;
+	Vector3D GetVec() const;
 
 	double Distance(const Point3D& point) const;
 	double Distance(const Line3D& second_line) const; // !!! HERE ARE LINES IN 3D !!!
 
 	bool Contains(const Point3D& point) const;
 
+	Point3D GetPoint() const;
 
 	Point3D GetIntersection(const Line3D& second_line) const;
 	Point3D GetIntersection(const Segment3D& segment) const;
@@ -56,9 +58,9 @@ public:
 	bool HasIntersection(const Segment3D& segment) const;
 	bool HasIntersection(const Ray3D& ray) const;
 private:
-	double A;
-	double B;
-	double C;
+	//We will set line as the point and vector
+	Point3D M;
+	Vector3D vect;
 };
 
 #endif /*Line3D_HPP_*/

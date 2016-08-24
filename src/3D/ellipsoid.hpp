@@ -39,15 +39,12 @@ public:
 	Point3D GetCenter() const;
 	double GetRadius() const;
 
-	double SurfaceArea() const;
-	double Volume() const;
+	double SurfaceArea() const override;
+	double Volume() const override;
 
-	bool Contains(const Point3D& point) const;
-	bool Boundary(const Point3D& point) const;
-
-	virtual vector<Point3D> GetIntersection(const Line3D& line) const override;
-	virtual vector<Point3D> GetIntersection(const Ray3D& ray) const override;
-	virtual vector<Point3D> GetIntersection(const Segment3D& segment) const override;
+	bool Contains(const Point3D& point) const override;
+	bool Boundary(const Point3D& point) const override;
+    
 protected:
 	Point3D center_;
 	double ax1_;
