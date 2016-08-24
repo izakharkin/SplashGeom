@@ -1,0 +1,8 @@
+About SplashGeom (c).
+
+SplashGeom (c) is an open-source C++-library for computational geometry. 
+
+First of all, it is an educational project, here we, students of MIPT, try to realize some useful and interesting geometry objects, You can help us by testing our library or finding and supplying some faster and better solutions of different computational geometry problems, it would be nice.
+
+So, if You want to use it – You can just download this repo and unpack it. Then include “splash_geom.hpp” in your project and use the power of computational geometry with us!
+
