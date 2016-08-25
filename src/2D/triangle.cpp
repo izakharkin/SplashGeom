@@ -20,7 +20,7 @@
 #include "triangle.hpp"
 
 Triangle::Triangle()
-	: Convex2D() {}
+	: Convex2D(3) {}
 
 Triangle::Triangle(const Point2D& a, const Point2D& b, const Point2D& c)
 	: Convex2D({ a, b, c }) {}
