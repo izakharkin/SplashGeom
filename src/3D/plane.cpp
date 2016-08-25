@@ -64,7 +64,6 @@ bool Plane::Contains(const Point3D& point) const
 	return this->Sign(point) == 0;
 }
 
-<<<<<<< HEAD
 Point3D Plane::GetIntersection(const Line3D& second_line) const
 {
 	double denominator = this->A * second_line.GetVec().x1 + this->B * second_line.GetVec().x2 + this->C * second_line.GetVec().x3;
@@ -76,21 +75,20 @@ Point3D Plane::GetIntersection(const Line3D& second_line) const
 
 Point3D Plane::GetIntersection(const Segment3D& segment) const
 {
-    return Point3D();
+	Line3D second_line(segment);
+	Point3D intersect_point = this->GetIntersection(second_line);
+	if (intersect_point != Point3D(INF, INF, INF) && !segment.Contains(intersect_point)) {
+		intersect_point = Point3D(INF, INF, INF);
+	}
+    return intersect_point;
 }
 
 Point3D Plane::GetIntersection(const Ray3D& ray) const
 {
-    return Point3D();
+	Line3D second_line(ray);
+	Point3D intersect_point = this->GetIntersection(second_line);
+	if (intersect_point != Point3D(INF, INF, INF) && !ray.Contains(intersect_point)) {
+		intersect_point = Point3D(INF, INF, INF);
+	}
+	return intersect_point;
 }
-=======
-Point3D Plane::GetIntersection(const Line3D& second_line) const {
-    return Point3D();
-}
-Point3D Plane::GetIntersection(const Segment3D& segment) const {
-    return Point3D();
-}
-Point3D Plane::GetIntersection(const Ray3D& ray) const {
-    return Point3D();
-}
->>>>>>> e58b46efeacea202f439f54705bdb6907b8a6001

@@ -37,8 +37,6 @@ public:
 	Line3D(const Point3D&, const Point3D&);
 	Line3D(const Point3D& point, const Vector3D& direction);
 
-	double PointIntoLine3D(const Point3D& point_to_insert_into_line) const;
-	int Sign(const Point3D& point) const;
 	Vector3D Direction() const;
 	Vector3D NormalVec() const;
 	Vector3D GetVec() const;
@@ -60,7 +58,7 @@ public:
 private:
 	//We will set line as the point and vector
 	Point3D M;
-	Vector3D vect;
+	Vector3D vect_direction;
 };
 
 #endif /*Line3D_HPP_*/

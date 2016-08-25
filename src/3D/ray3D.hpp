@@ -41,7 +41,6 @@ public:
 	Vector3D NormalVec() const;
 
 	double Distance(const Point3D&) const;
-	double Distance(const Ray3D&) const; // !!! HERE ARE RAYS IN 3D !!!
 
 	bool Contains(const Point3D&) const;
 

@@ -57,9 +57,7 @@ Point3D Ray3D::GetIntersection(const Line3D& second_line) const
 {
 	Line3D this_line(*this);
 	Point3D intersect_point = this_line.GetIntersection(second_line);
-	if (intersect_point != Point3D(-INF, -INF, -INF)) {
-		intersect_point = this->pos_;
-	} else if (intersect_point != Point3D(INF, INF, INF) && !this->Contains(intersect_point)) {
+	if (intersect_point != Point3D(INF, INF, INF) && !this->Contains(intersect_point)) {
 		intersect_point = Point3D(INF, INF, INF);
 	}
 	return intersect_point;
@@ -70,17 +68,10 @@ Point3D Ray3D::GetIntersection(const Ray3D& second_ray) const
 	Line3D this_line(*this);
 	Line3D second_line(second_ray);
 	Point3D intersect_point = this_line.GetIntersection(second_line);
-	if (intersect_point == Point3D(-INF, -INF, -INF)) {
-		if (this->Contains(second_ray.pos_)) {
-			intersect_point = second_ray.pos_;
-		} else if (second_ray.Contains(this->pos_)) {
-			intersect_point = this->pos_;
-		}
-	} else if (intersect_point != Point3D(INF, INF, INF)) {
-		if (!this->Contains(intersect_point) || !second_ray.Contains(intersect_point)) {
-			intersect_point = Point3D(INF, INF, INF);
-		}
-	}
+	
+	if (intersect_point != Point3D(INF, INF, INF) && (!this->Contains(intersect_point) || !second_ray.Contains(intersect_point)))
+		intersect_point = Point3D(INF, INF, INF);
+
 	return intersect_point;
 }
 
@@ -89,17 +80,10 @@ Point3D Ray3D::GetIntersection(const Segment3D& segment) const
 	Line3D this_line(*this);
 	Line3D second_line(segment);
 	Point3D intersect_point = this_line.GetIntersection(second_line);
-	if (intersect_point == Point3D(-INF, -INF, -INF)) {
-		if (this->Contains(segment.a)) {
-			intersect_point = segment.a;
-		} else if (segment.Contains(this->pos_)) {
-			intersect_point = this->pos_;
-		}
-	} else if (intersect_point != Point3D(INF, INF, INF)) {
-		if (!this->Contains(intersect_point) || !segment.Contains(intersect_point)) {
-			intersect_point = Point3D(INF, INF, INF);
-		}
-	}
+	
+	if (intersect_point != Point3D(INF, INF, INF) && (!this->Contains(intersect_point) || !segment.Contains(intersect_point)))
+		intersect_point = Point3D(INF, INF, INF);
+	
 	return intersect_point;
 }
 

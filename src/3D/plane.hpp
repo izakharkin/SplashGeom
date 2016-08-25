@@ -1,4 +1,4 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
@@ -20,8 +20,8 @@
 #ifndef PLANE_HPP_
 #define PLANE_HPP_
 
-#include "splash_forward.hpp"
-#include "splash_utils.hpp"
+#include "../splash_forward.hpp"
+#include "../splash_utils.hpp"
 
 #include "point3D.hpp"
 #include "vector3D.hpp"
@@ -42,8 +42,7 @@ public:
 	Vector3D NormalVec() const;
 
 	double Distance(const Point3D& point) const;
-	double Distance(const Line3D& second_line) const;
-
+	
 	bool Contains(const Point3D& point) const;
 
 	Point3D GetIntersection(const Line3D& second_line) const;
