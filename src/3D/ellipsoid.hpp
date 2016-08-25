@@ -20,8 +20,8 @@
 #ifndef ELLIPSOID_HPP_
 #define ELLIPSOID_HPP_
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+#include "splash_forward.hpp"
+#include "splash_utils.hpp"
 
 #include "point3D.hpp"
 #include "vector3D.hpp"

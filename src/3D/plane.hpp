@@ -20,8 +20,8 @@
 #ifndef PLANE_HPP_
 #define PLANE_HPP_
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+#include "splash_forward.hpp"
+#include "splash_utils.hpp"
 
 #include "point3D.hpp"
 #include "vector3D.hpp"
