@@ -17,8 +17,8 @@
 	You should have received a copy of the GNU General Public License
 	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef SPLASH3D_HPP_
-#define SPLASH3D_HPP_
+#ifndef SPLASHGEOM3D_HPP_
+#define SPLASHGEOM3D_HPP_
 
 #include "point3D.hpp"
 #include "vector3D.hpp"
@@ -31,4 +31,4 @@
 #include "cylinder.hpp"
 #include "cube.hpp"
 
-#endif /*SPLASH3D_HPP_*/
+#endif /*SPLASHGEOM3D_HPP_*/

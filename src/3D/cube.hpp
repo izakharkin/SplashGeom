@@ -18,7 +18,7 @@
 	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Point3D.hpp"
+#include "point3D.hpp"
 #include "line3D.hpp"
 #include "segment3D.hpp"
 #include "plane.hpp"
