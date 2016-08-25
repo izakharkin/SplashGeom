@@ -1,4 +1,4 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashgEOM (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
@@ -75,15 +75,9 @@ Point3D Segment3D::GetIntersection(const Segment3D& second_seg) const
 	Line3D first_line(*this);
 	Line3D second_line(second_seg);
 	Point3D intersect_point = first_line.GetIntersection(second_line);
-	if (intersect_point == Point3D(-INF, -INF, -INF)) {
-		if (this->Point3DInBox(second_seg.a)) {
-			intersect_point = second_seg.a;
-		} else if (this->Point3DInBox(second_seg.b)) {
-			intersect_point = second_seg.b;
-		}
-	} else if (!(this->Point3DInBox(intersect_point) && second_seg.Point3DInBox(intersect_point))) {
-			intersect_point = Point3D(INF, INF, INF);
-	}
+	
+	if (intersect_point != Point3D(INF, INF, INF) && (!this->Contains(intersect_point) || !second_seg.Contains(intersect_point)))
+		intersect_point = Point3D(INF, INF, INF);
 
 	return intersect_point;
 }

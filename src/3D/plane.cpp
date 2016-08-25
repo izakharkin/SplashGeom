@@ -75,10 +75,20 @@ Point3D Plane::GetIntersection(const Line3D& second_line) const
 
 Point3D Plane::GetIntersection(const Segment3D& segment) const
 {
-    return Point3D();
+	Line3D second_line(segment);
+	Point3D intersect_point = this->GetIntersection(second_line);
+	if (intersect_point != Point3D(INF, INF, INF) && !segment.Contains(intersect_point)) {
+		intersect_point = Point3D(INF, INF, INF);
+	}
+    return intersect_point;
 }
 
 Point3D Plane::GetIntersection(const Ray3D& ray) const
 {
-    return Point3D();
+	Line3D second_line(ray);
+	Point3D intersect_point = this->GetIntersection(second_line);
+	if (intersect_point != Point3D(INF, INF, INF) && !ray.Contains(intersect_point)) {
+		intersect_point = Point3D(INF, INF, INF);
+	}
+	return intersect_point;
 }

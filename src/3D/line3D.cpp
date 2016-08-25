@@ -1,4 +1,4 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 3016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
@@ -20,50 +20,31 @@
 #include "line3D.hpp"
 
 Line3D::Line3D()
-	: M(0.0, 0.0, 0.0), vect(Point3D(0.0, 0.0, 0.0), Point3D(0.0, 0.0, 0.0)) {}
+	: M(0.0, 0.0, 0.0), vect_direction(Point3D(0.0, 0.0, 0.0), Point3D(0.0, 0.0, 0.0)) {}
 
 Line3D::Line3D(const Ray3D& ray)
 	: Line3D(ray.pos_, ray.dir_) {}
 
 Line3D::Line3D(const Segment3D& seg)
-{
-	/*
-	A = seg.b.y - seg.a.y;
-	B = seg.a.x - seg.b.x;
-	C = -A * seg.a.x - B * seg.a.y;
-	*/
-}
+	: Line3D(seg.a, Vector3D(seg.b, seg.a)) {}
 
 Line3D::Line3D(const Point3D& a, const Point3D& b)
 {
 	this->M = a;
-	this->vect = Vector3D(a, b);
+	this->vect_direction = Vector3D(a, b);
 }
 
 Line3D::Line3D(const Point3D& point, const Vector3D& direction)
-	: M(point), vect(direction) {}
-
-double Line3D::PointIntoLine3D(const Point3D& point) const
-{
-	//return A * point.x + B * point.y + C;
-	return 0.0;
-}
-
-int Line3D::Sign(const Point3D& point) const
-{
-	double val = this->PointIntoLine3D(point);
-	return (fabs(val) <= EPS ? 0 : (val > 0 ? 1 : -1));
-}
+	: M(point), vect_direction(direction) {}
 
 Vector3D Line3D::Direction() const
 {
-	//return Vector3D(-this->B, this->A, 0);
-	return Vector3D(0, 0, 0);
+	return this->vect_direction;
 }
 
 Vector3D Line3D::GetVec() const
 {
-	return this->vect;
+	return this->vect_direction;
 }
 
 Point3D Line3D::GetPoint() const
@@ -73,48 +54,67 @@ Point3D Line3D::GetPoint() const
 
 Vector3D Line3D::NormalVec() const
 {
-//	return Vector3D(this->A, this->B, 0);
-	return Vector3D(0, 0, 0);
+	double m = 1.0;
+	if (this->vect_direction.x1 != 0)
+	{
+		m = -vect_direction.x2 / (vect_direction.x1 + vect_direction.x3);
+		return Vector3D(m, 1, m);
+	}
+	if (this->vect_direction.x2 != 0 || this->vect_direction.x3 != 0)
+	{
+		m = -vect_direction.x1 / (vect_direction.x2 + vect_direction.x3);
+		return Vector3D(m, 1, m);
+	}
+	return Vector3D(m, m, m);
 }
 
 double Line3D::Distance(const Point3D& point) const
 {
-	return PointIntoLine3D(point) / this->NormalVec().Norm();
+	double a = this->vect_direction.x1;
+	double b = this->vect_direction.x2;
+	double c = this->vect_direction.x3;
+
+	double det1 = (point.y - this->M.y) * c - b * (point.z - this->M.z);
+	double det2 = (point.z - this->M.z) * a - c * (point.x - this->M.x);
+	double det3 = (point.x - this->M.x) * b - a * (point.y - this->M.y);
+
+	double dist = sqrt((det1 * det1 + det2 * det2 + det3 * det3) / (a * a + b * b + c * c));
+	return dist / this->NormalVec().Norm();
 }
 
 bool Line3D::Contains(const Point3D& point) const
 {
-	return this->Sign(point) == 0;
+	double t1 = (point.x - this->M.x) / this->vect_direction.x1;
+	double t2 = (point.y - this->M.y) / this->vect_direction.x2;
+	double t3 = (point.z - this->M.z) / this->vect_direction.x3;
+	return (t1 == t2) && (t2 == t3);
 }
 
 Point3D Line3D::GetIntersection(const Line3D& second_line) const
 {
-	/*
-	double cross_prod_norms = Vector3D(this->A, this->B, 0).OrientedCCW(Vector3D(second_line.A, second_line.B, 0));
-	Point3D intersect_point;
-	if (cross_prod_norms <= EPS) /* A1 / A2 == B1 / B2  {
-		if (this->B * second_line.C == second_line.B * this->C) /* .. == C1 / C2  {
-			intersect_point = Point3D(-INF, -INF, -INF);
-		} else {
-			intersect_point = Point3D(INF, INF, INF);
-		}
-	} else {
-		double res_y = (this->C - second_line.C) / cross_prod_norms * this->A;
-		double res_x = -(this->B * res_y + this->C) / this->A;
-		intersect_point = Point3D(res_x, res_y, 0);
-	}
-	return intersect_point;
-	*/
-	return Point3D(0.0, 0.0, 0.0);
+	double denominator_x = (this->vect_direction.x2 * second_line.vect_direction.x1 - second_line.vect_direction.x2 * this->vect_direction.x1);
+	double denominator_y = (this->vect_direction.x1 * second_line.vect_direction.x2 - second_line.vect_direction.x1 * this->vect_direction.x2);
+	double denominator_z = (this->vect_direction.x2 * second_line.vect_direction.x3 - second_line.vect_direction.x2 * this->vect_direction.x3);
+	
+	if (denominator_x * denominator_y * denominator_z == 0)
+		return Point3D(INF, INF, INF);
+
+	Point3D point;
+	point.x = (this->M.x * this->vect_direction.x2 * second_line.vect_direction.x1 - second_line.M.x * second_line.vect_direction.x2 * this->vect_direction.x1
+		- this->M.y * this->vect_direction.x1 * second_line.vect_direction.x1 + second_line.M.y * this->vect_direction.x1 * second_line.vect_direction.x1) / denominator_x;
+	point.y = (this->M.y * this->vect_direction.x1 * second_line.vect_direction.x2 - second_line.M.y * second_line.vect_direction.x1 * this->vect_direction.x2
+		- this->M.x * this->vect_direction.x2 * second_line.vect_direction.x2 + second_line.M.x * this->vect_direction.x2 * second_line.vect_direction.x2) / denominator_y;
+	point.z = (this->M.z * this->vect_direction.x2 * second_line.vect_direction.x3 - second_line.M.z * second_line.vect_direction.x2 * this->vect_direction.x3
+		- this->M.y * this->vect_direction.x3 * second_line.vect_direction.x3 + second_line.M.y * this->vect_direction.x3 * second_line.vect_direction.x3) / denominator_z;
+	
+	return point;
 }
 
 Point3D Line3D::GetIntersection(const Segment3D& segment) const
 {
 	Line3D second_line(segment);
 	Point3D intersect_point = this->GetIntersection(second_line);
-	if (intersect_point == Point3D(-INF, -INF, -INF)) {
-		intersect_point = segment.a;
-	} else if (intersect_point != Point3D(INF, INF, INF) && !segment.Contains(intersect_point)) {
+	if (intersect_point != Point3D(INF, INF, INF) && !segment.Contains(intersect_point)) {
 		intersect_point = Point3D(INF, INF, INF);
 	}
 	return intersect_point;
@@ -124,9 +124,7 @@ Point3D Line3D::GetIntersection(const Ray3D& ray) const
 {
 	Line3D second_line(ray);
 	Point3D intersect_point = this->GetIntersection(second_line);
-	if (intersect_point == Point3D(-INF, -INF, -INF)) {
-		intersect_point = ray.pos_;
-	} else if (intersect_point != Point3D(INF, INF, INF) && !ray.Contains(intersect_point)) {
+	if (intersect_point != Point3D(INF, INF, INF) && !ray.Contains(intersect_point)) {
 		intersect_point = Point3D(INF, INF, INF);
 	}
 	return intersect_point;
