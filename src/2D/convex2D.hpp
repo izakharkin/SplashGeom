@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef CONVEX2D_HPP_
 #define CONVEX2D_HPP_
@@ -28,33 +28,32 @@
 class Convex2D : public Polygon
 {
 public:
-	Convex2D();
-	Convex2D(int n);
+	explicit Convex2D();
+	explicit Convex2D(int n);
 
 	Convex2D(const Convex2D& second_polygon);
-	void operator =(const Convex2D& second_polygon);
+	Convex2D& operator =(const Convex2D& second_polygon);
 
 	Convex2D(const vector<Point2D>& points);
-	void operator =(const vector<Point2D>& points);
+	Convex2D& operator =(const vector<Point2D>& points);
 
 	Convex2D(Convex2D&& second_polygon);
-	void operator =(Convex2D&& second_polygon);
+	Convex2D& operator =(Convex2D&& second_polygon);
 
 	void AddVertex(const Point2D& new_vertex);
 
-	int Size() const;
+	size_t Size() const;
 
 	Point2D Next(int i) const;
 	Point2D Prev(int i) const;
 	Point2D GetCurVertex() const;
+	Point2D GetLastVertex() const;
+	Point2D GetLastPrevVertex() const;
 	void MoveCurVertex();
 	Segment2D GetCurEdge() const;
 
 	vector<Point2D> GetVertices() const;
 	vector<Segment2D> GetEdges() const;
-
-	vector<Point2D> MakeConvexHullGrehem(const vector<Point2D>& points);
-	vector<Point2D> MakeConvexHullJarvis(const vector<Point2D>& points);
 
 	double Area() const;
 	bool Contains(const Point2D&) const;
@@ -62,15 +61,33 @@ public:
 	
 	virtual vector<Point2D> GetIntersection(const Line2D&) const override;
 	virtual vector<Point2D> GetIntersection(const Ray2D&) const override;
-	virtual vector<Point2D> GetIntersection(const Segment2D& segment) const;
+	virtual vector<Point2D> GetIntersection(const Segment2D& segment) const override;
 
 	Convex2D GetIntersectionalConvex(Convex2D& second_polygon);
 private:
 	size_t cur_vertex_ind;
 };
+
+vector<Point2D> MakeConvexHullGrehem(const vector<Point2D>& points);
+vector<Point2D> MakeConvexHullJarvis(const vector<Point2D>& points);
+
+enum class NumOfCase
+{
+	kBothLooks = 1,
+	kFirstLooksAtSecond,
+	kSecondLooksAtFirst,
+	kBothNotLooks,
+};
+
+enum class WhichEdge
+{
+	kFirstEdge = 1,
+	kSecondEdge = 2,
+	Unknown,
+};
 // non-member functions for .GetIntersectionalConvex()
-int EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge);
-char WhichEdgeIsInside(const Segment2D& first_edge, const Segment2D& second_edge);
-char Moving(const Segment2D& first_edge, const Segment2D& second_edge, bool state, Convex2D& result_polygon);
+NumOfCase EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge);
+WhichEdge WhichEdgeIsInside(const Segment2D& first_edge, const Segment2D& second_edge);
+WhichEdge MoveOneOfEdges(const Segment2D& first_edge, const Segment2D& second_edge, Convex2D& result_polygon);
 
 #endif /*CONVEX2D_HPP_*/

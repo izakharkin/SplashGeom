@@ -24,3 +24,18 @@
 	return (fabs(d) <= EPS ? 0 : (d > 0 ? 1 : -1));
 }
 
+vector<double> GetQuadraticSolution(double a, double b, double c)
+{
+	vector<double> roots;
+	double D = pow(b, 2) - 4 * a * c;
+	if (fabs(D) <= EPS) {
+		double x = -b / (2 * a);
+		roots.push_back(x);
+	} else if (D > 0) {
+		double x1 = (-b - sqrt(D)) / (2 * a);
+		double x2 = (-b + sqrt(D)) / (2 * a);
+		roots.push_back(x1);
+		roots.push_back(x2);
+	}
+	return roots;
+}

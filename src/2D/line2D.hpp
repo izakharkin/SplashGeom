@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef LINE2D_HPP_
 #define LINE2D_HPP_
@@ -31,11 +31,15 @@
 class Line2D
 {
 public:
-	Line2D();
-	Line2D(const Ray2D&);
-	Line2D(const Segment2D&);
-	Line2D(const Point2D&, const Point2D&);
-	Line2D(const Point2D& point, const Vector2D& direction);
+	explicit Line2D();
+	explicit Line2D(const Ray2D& ray);
+	explicit Line2D(const Segment2D& segment);
+	explicit Line2D(const Point2D& p1, const Point2D& p2);
+	explicit Line2D(const Point2D& point, const Vector2D& direction);
+
+	double GetA() const;
+	double GetB() const;
+	double GetC() const;
 
 	double PointIntoLine2D(const Point2D& point_to_insert_into_line) const;
 	int Sign(const Point2D& point) const;

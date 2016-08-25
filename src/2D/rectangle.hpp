@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef RECTANGLE_HPP_
 #define RECTANGLE_HPP_
@@ -28,11 +28,20 @@
 class Rectangle : public Convex2D
 {
 public:
-	Rectangle();
-	Rectangle(const vector<Point2D>& points);
-	Rectangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const Point2D& p4);
+	explicit Rectangle();
+
+	explicit Rectangle(const Rectangle& second_polygon);
+	Rectangle& operator =(const Rectangle& second_polygon);
+
+	explicit Rectangle(Rectangle&& second_polygon);
+	Rectangle& operator =(Rectangle&& second_polygon);
+
+	explicit Rectangle(const vector<Point2D>& points);
+	explicit Rectangle(const Point2D& p1, const Point2D& p2, const Point2D& p3, const Point2D& p4);
 
 	double Area() const;
+	double Perimeter() const;
+
 	bool Contains(const Point2D&) const;
 	bool Boundary(const Point2D&) const;
 	
@@ -43,6 +52,6 @@ public:
 	Convex2D GetIntersectionalConvex2D(const Point2D& cur_point, const Line2D& halfplane) const;
 };
 
-const Rectangle kMaxRectangle = Rectangle(Point2D(INF, INF), Point2D(-INF, INF), Point2D(-INF, -INF), Point2D(INF, -INF));
+const Rectangle kMaxRectangle(Rectangle(Point2D(INF, INF), Point2D(-INF, INF), Point2D(-INF, -INF), Point2D(INF, -INF)));
 
 #endif /*RECTANGLE_HPP_*/

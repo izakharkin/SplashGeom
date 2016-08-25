@@ -43,6 +43,12 @@ void EdgeNode::Finish(const Point2D& end_point)
 	finished_ = true;
 }
 
+std::ostream& operator<<(std::ostream& out_stream, const EdgeNode& edge_node)
+{
+	out_stream << edge_node.edge_.a << ' -> ' << edge_node.edge_.b;
+	return out_stream;
+}
+
 void DCEL::AddEdge(const EdgeNode& new_edge)
 {
 	edges.push_back(new_edge);
