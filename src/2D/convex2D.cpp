@@ -191,6 +191,7 @@ vector<Point2D> MakeConvexHullJarvis(const vector<Point2D>& points)
 		convex_hull.push_back(vertices_[min]);
 		min = 0;
 		if (convex_hull[cur_index] == convex_hull[0]) {
+
 			flag = false;
 			convex_hull.erase(convex_hull.begin() + cur_index);
 		}
@@ -239,29 +240,24 @@ bool Convex2D::Contains(const Point2D& point) const
 	return contains;
 }
 
-double Convex2D::Perimeter() const
+bool Convex2D::Boundary(const Point2D& p) const
 {
-	return Polygon::Perimeter();
+	return 0;
 }
 
-bool Convex2D::Boundary(const Point2D& point) const
+vector<Point2D> Convex2D::GetIntersection(const Line2D&) const
 {
-	return Polygon::Boundary(point);
+	return vector<Point2D>();
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Line2D& line) const
+vector<Point2D> Convex2D::GetIntersection(const Ray2D&) const
 {
-	return Polygon::GetIntersection(line);
+	return vector<Point2D>();
 }
 
-vector<Point2D> Convex2D::GetIntersection(const Ray2D& ray) const
+vector<Point2D> Convex2D::GetIntersection(const Segment2D&) const
 {
-	return Polygon::GetIntersection(ray);
-}
-
-vector<Point2D> Convex2D::GetIntersection(const Segment2D& segment) const
-{
-	return Polygon::GetIntersection(segment);
+	return vector<Point2D>();
 }
 
 NumOfCase EdgesCaseNum(const Segment2D& first_edge, const Segment2D& second_edge)

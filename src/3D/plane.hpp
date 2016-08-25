@@ -20,8 +20,8 @@
 #ifndef PLANE_HPP_
 #define PLANE_HPP_
 
-#include "../splash_forward.hpp"
-#include "../splash_utils.hpp"
+#include "splash_forward.hpp"
+#include "splash_utils.hpp"
 
 #include "point3D.hpp"
 #include "vector3D.hpp"
@@ -46,9 +46,9 @@ public:
 
 	bool Contains(const Point3D& point) const;
 
-	Point2D GetIntersection(const Line3D& second_line) const;
-	Point2D GetIntersection(const Segment3D& segment) const;
-	Point2D GetIntersection(const Ray3D& ray) const;
+	Point3D GetIntersection(const Line3D& second_line) const;
+	Point3D GetIntersection(const Segment3D& segment) const;
+	Point3D GetIntersection(const Ray3D& ray) const;
 private:
 	double A;
 	double B;

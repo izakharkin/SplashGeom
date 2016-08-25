@@ -24,10 +24,19 @@ Plane::Plane()
 
 Plane::Plane(const Point3D& p1, const Point3D& p2, const Point3D& p3)  
 {
-	
+	A = p1.y * (p2.x - p3.z) + p2.y * (p3.z - p1.z) + p3.y * (p1.z - p2.z);
+	B = p1.z * (p2.x - p3.x) + p2.z * (p3.x - p1.x) + p3.z * (p1.x - p2.x);
+	C = p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y);
+	D = - p1.x * (p2.y * p3.z - p3.y * p2.z) - p2.x * (p3.y * p1.z - p1.y * p3.z) - p3.x * (p1.y * p2.z - p2.y * p1.z);
 }
 
-Plane::Plane(const Point3D& point, const Vector3D& direction1, const Vector3D& direction_2) {}
+Plane::Plane(const Point3D& point, const Vector3D& direction_1, const Vector3D& direction_2)
+{
+	A = direction_1.x2 * direction_2.x3 - direction_2.x2 * direction_1.x3;
+	B = direction_2.x1 * direction_1.x3 - direction_1.x1 * direction_2.x3;
+	C = direction_1.x1 * direction_2.x2 - direction_2.x1 * direction_1.x2;
+	D = point.x * A - point.y * B - point.z * C;
+}
 
 double Plane::PointIntoPlane(const Point3D& point) const
 {
@@ -55,3 +64,33 @@ bool Plane::Contains(const Point3D& point) const
 	return this->Sign(point) == 0;
 }
 
+<<<<<<< HEAD
+Point3D Plane::GetIntersection(const Line3D& second_line) const
+{
+	double denominator = this->A * second_line.GetVec().x1 + this->B * second_line.GetVec().x2 + this->C * second_line.GetVec().x3;
+	if (denominator == 0)
+		return Point3D(INF, INF, INF);//no intersections
+	double parametr = -(this->A * second_line.GetPoint().x + this->B * second_line.GetPoint().y + this->C * second_line.GetPoint().y + this->D) / denominator;
+    return Point3D(second_line.GetPoint().x + second_line.GetVec().x1 * parametr, second_line.GetPoint().y + second_line.GetVec().x2 * parametr, second_line.GetPoint().z + second_line.GetVec().x3 * parametr);
+}
+
+Point3D Plane::GetIntersection(const Segment3D& segment) const
+{
+    return Point3D();
+}
+
+Point3D Plane::GetIntersection(const Ray3D& ray) const
+{
+    return Point3D();
+}
+=======
+Point3D Plane::GetIntersection(const Line3D& second_line) const {
+    return Point3D();
+}
+Point3D Plane::GetIntersection(const Segment3D& segment) const {
+    return Point3D();
+}
+Point3D Plane::GetIntersection(const Ray3D& ray) const {
+    return Point3D();
+}
+>>>>>>> e58b46efeacea202f439f54705bdb6907b8a6001

@@ -20,31 +20,33 @@
 #include "line3D.hpp"
 
 Line3D::Line3D()
-	: A(0.0), B(0.0), C(0.0) {}
+	: M(0.0, 0.0, 0.0), vect(Point3D(0.0, 0.0, 0.0), Point3D(0.0, 0.0, 0.0)) {}
 
 Line3D::Line3D(const Ray3D& ray)
 	: Line3D(ray.pos_, ray.dir_) {}
 
 Line3D::Line3D(const Segment3D& seg)
 {
+	/*
 	A = seg.b.y - seg.a.y;
 	B = seg.a.x - seg.b.x;
 	C = -A * seg.a.x - B * seg.a.y;
+	*/
 }
 
 Line3D::Line3D(const Point3D& a, const Point3D& b)
 {
-	A = b.y - a.y;
-	B = a.x - b.x;
-	C = -A * a.x - B * a.y;
+	this->M = a;
+	this->vect = Vector3D(a, b);
 }
 
 Line3D::Line3D(const Point3D& point, const Vector3D& direction)
-	: Line3D(point, point + direction) {}
+	: M(point), vect(direction) {}
 
 double Line3D::PointIntoLine3D(const Point3D& point) const
 {
-	return A * point.x + B * point.y + C;
+	//return A * point.x + B * point.y + C;
+	return 0.0;
 }
 
 int Line3D::Sign(const Point3D& point) const
@@ -55,12 +57,24 @@ int Line3D::Sign(const Point3D& point) const
 
 Vector3D Line3D::Direction() const
 {
-	return Vector3D(-this->B, this->A, 0);
+	//return Vector3D(-this->B, this->A, 0);
+	return Vector3D(0, 0, 0);
+}
+
+Vector3D Line3D::GetVec() const
+{
+	return this->vect;
+}
+
+Point3D Line3D::GetPoint() const
+{
+	return this->M;
 }
 
 Vector3D Line3D::NormalVec() const
 {
-	return Vector3D(this->A, this->B, 0);
+//	return Vector3D(this->A, this->B, 0);
+	return Vector3D(0, 0, 0);
 }
 
 double Line3D::Distance(const Point3D& point) const
@@ -75,10 +89,11 @@ bool Line3D::Contains(const Point3D& point) const
 
 Point3D Line3D::GetIntersection(const Line3D& second_line) const
 {
+	/*
 	double cross_prod_norms = Vector3D(this->A, this->B, 0).OrientedCCW(Vector3D(second_line.A, second_line.B, 0));
 	Point3D intersect_point;
-	if (cross_prod_norms <= EPS) /* A1 / A2 == B1 / B2 */ {
-		if (this->B * second_line.C == second_line.B * this->C) /* .. == C1 / C2 */ {
+	if (cross_prod_norms <= EPS) /* A1 / A2 == B1 / B2  {
+		if (this->B * second_line.C == second_line.B * this->C) /* .. == C1 / C2  {
 			intersect_point = Point3D(-INF, -INF, -INF);
 		} else {
 			intersect_point = Point3D(INF, INF, INF);
@@ -89,6 +104,8 @@ Point3D Line3D::GetIntersection(const Line3D& second_line) const
 		intersect_point = Point3D(res_x, res_y, 0);
 	}
 	return intersect_point;
+	*/
+	return Point3D(0.0, 0.0, 0.0);
 }
 
 Point3D Line3D::GetIntersection(const Segment3D& segment) const
