@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "polygon.hpp"
 
@@ -31,9 +31,10 @@ Polygon::Polygon(const Polygon& second_polygon)
 	std::copy(second_polygon.vertices_.begin(), second_polygon.vertices_.end(), vertices_.begin());
 }
 
-void Polygon::operator =(const Polygon& second_polygon)
+Polygon& Polygon::operator =(const Polygon& second_polygon)
 {
 	vertices_ = second_polygon.vertices_;
+	return *this;
 }
 
 Polygon::Polygon(const vector<Point2D>& points)
@@ -42,9 +43,10 @@ Polygon::Polygon(const vector<Point2D>& points)
 	std::copy(points.begin(), points.end(), vertices_.begin());
 }
 
-void Polygon::operator =(const vector<Point2D>& points)
+Polygon& Polygon::operator =(const vector<Point2D>& points)
 {
 	std::copy(points.begin(), points.end(), vertices_.begin());
+	return *this;
 }
 
 Polygon::Polygon(Polygon&& second_polygon)
@@ -52,12 +54,13 @@ Polygon::Polygon(Polygon&& second_polygon)
 	vertices_ = std::move(second_polygon.vertices_);
 }
 
-void Polygon::operator =(Polygon&& second_polygon)
+Polygon& Polygon::operator =(Polygon&& second_polygon)
 {
 	vertices_ = std::move(second_polygon.vertices_);
+	return *this;
 }
 
-int Polygon::Size() const
+size_t Polygon::Size() const
 {
 	return vertices_.size();
 }
@@ -65,9 +68,8 @@ int Polygon::Size() const
 double Polygon::Area() const 
 {
 	double area = 0;
-	int sz = this->Size();
-	for (int i = 0; i < sz; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size(); ++i) {
+		size_t j = (i + 1) % this->Size();
 		area += Vector2D(vertices_[i]).OrientedCCW(Vector2D(vertices_[j] - vertices_[i]));
 	}
 	return fabs(area / 2.0);
@@ -76,9 +78,8 @@ double Polygon::Area() const
 double Polygon::Perimeter() const
 {
 	double perimeter = 0;
-	int sz = this->Size();
-	for (int i = 0; i < sz; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size(); ++i) {
+		size_t j = (i + 1) % this->Size();
 		perimeter += Segment2D(vertices_[i], vertices_[j]).Length();
 	}
 	return perimeter;
@@ -87,11 +88,10 @@ double Polygon::Perimeter() const
 bool Polygon::Contains(const Point2D& point) const
 {
 	int num_of_cross_sides = 0;
-	size_t sz = this->Size();
 	Ray2D checking_ray(point, Vector2D(1, 0));
 	bool is_on_border = false;
-	for (size_t i = 0; i < sz && !is_on_border; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size() && !is_on_border; ++i) {
+		int j = (i + 1) % this->Size();
 		Segment2D cur_side(vertices_[i], vertices_[j]);
 		if (cur_side.Contains(point)) {
 			is_on_border = true;
@@ -105,10 +105,9 @@ bool Polygon::Contains(const Point2D& point) const
 
 bool Polygon::Boundary(const Point2D & point) const
 {
-	size_t sz = vertices_.size();
 	bool is_on_border = false;
-	for (size_t i = 0; i < sz && !is_on_border; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size() && !is_on_border; ++i) {
+		size_t j = (i + 1) % this->Size();
 		Segment2D cur_side(vertices_[i], vertices_[j]);
 		if (cur_side.Contains(point)) {
 			is_on_border = true;
@@ -120,9 +119,8 @@ bool Polygon::Boundary(const Point2D & point) const
 vector<Point2D> Polygon::GetIntersection(const Line2D& line) const
 {
 	vector<Point2D> intersect_points;
-	size_t sz = this->Size();
-	for (size_t i = 0; i < sz; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size(); ++i) {
+		size_t j = (i + 1) % this->Size();
 		Segment2D cur_side(vertices_[i], vertices_[j]);
 		Point2D cur_intersection = line.GetIntersection(cur_side);
 		if (cur_intersection != kInfPoint2D) {
@@ -135,9 +133,8 @@ vector<Point2D> Polygon::GetIntersection(const Line2D& line) const
 vector<Point2D> Polygon::GetIntersection(const Ray2D& ray) const
 {
 	vector<Point2D> intersect_points;
-	size_t sz = this->Size();
-	for (size_t i = 0; i < sz; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size(); ++i) {
+		size_t j = (i + 1) % this->Size();
 		Segment2D cur_side(vertices_[i], vertices_[j]);
 		Point2D cur_intersection = ray.GetIntersection(cur_side);
 		if (cur_intersection != kInfPoint2D) {
@@ -150,9 +147,8 @@ vector<Point2D> Polygon::GetIntersection(const Ray2D& ray) const
 vector<Point2D> Polygon::GetIntersection(const Segment2D& segment) const
 {
 	vector<Point2D> intersect_points;
-	size_t sz = this->Size();
-	for (size_t i = 0; i < sz; ++i) {
-		int j = (i + 1) % sz;
+	for (size_t i = 0; i < this->Size(); ++i) {
+		size_t j = (i + 1) % this->Size();
 		Segment2D cur_side(vertices_[i], vertices_[j]);
 		Point2D cur_intersection = segment.GetIntersection(cur_side);
 		if (cur_intersection != kInfPoint2D) {

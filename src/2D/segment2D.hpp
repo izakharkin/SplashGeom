@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #ifndef SEGMENT_HPP_
 #define SEGMENT_HPP_
@@ -33,9 +33,9 @@ public:
 	Point2D a;
 	Point2D b;
 
-	Segment2D();
-	Segment2D(const Point2D& point_a, const Point2D& point_b);
-	Segment2D(const Vector2D& vector);
+	explicit Segment2D();
+	explicit Segment2D(const Point2D& point_a, const Point2D& point_b);
+	explicit Segment2D(const Vector2D& vector);
 	
 	void Reverse();
 

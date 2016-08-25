@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "circle.hpp"
 
@@ -24,25 +24,35 @@ Circle::Circle()
 
 Circle::Circle(const Point2D& center, double radius)
 	: Ellipse(center, radius, radius) {}
-/*
+
 Circle::Circle(const Circle& second_circle)
-: center_(second_circle.center_), little_haxis_(second_circle.little_haxis_), big_haxis_(second_circle.big_haxis_) {}
+{
+	center_ = second_circle.center_;
+	little_haxis_ = second_circle.little_haxis_;
+	big_haxis_ = second_circle.big_haxis_;
+}
 
 void Circle::operator = (const Circle& second_circle)
 {
-
+	center_ = second_circle.center_;
+	little_haxis_ = second_circle.little_haxis_;
+	big_haxis_ = second_circle.big_haxis_;
 }
 
 Circle::Circle(Circle&& second_circle)
 {
-
+	center_ = move(second_circle.center_);
+	little_haxis_ = second_circle.little_haxis_;
+	big_haxis_ = second_circle.big_haxis_;
 }
 
 void Circle::operator = (Circle&& second_circle)
 {
-
+	center_ = move(second_circle.center_);
+	little_haxis_ = second_circle.little_haxis_;
+	big_haxis_ = second_circle.big_haxis_;
 }
-*/
+
 Circle::Circle(const Point2D& p1, const Point2D& p2, const Point2D& p3)
 {
 	Segment2D first_segment(p1, p2);
@@ -74,7 +84,7 @@ double Circle::GetRadius() const
 
 Point2D Circle::GetLowestPoint() const
 {
-	return Point2D(this->center_ + Point2D(0, this->center_.y + this->little_haxis_));
+	return Point2D(this->center_ + Point2D(0, this->center_.y - this->little_haxis_));
 }
 
 double Circle::Area() const
@@ -92,17 +102,17 @@ bool Circle::Boundary(const Point2D& point) const
 	return this->center_.l2_distance(point) == little_haxis_;
 }
 
-vector<Point2D> Circle::GetIntersection(const Line2D&) const
+vector<Point2D> Circle::GetIntersection(const Line2D& line) const
 {
-	return vector<Point2D>();
+	return Ellipse::GetIntersection(line);
 }
 
-vector<Point2D> Circle::GetIntersection(const Ray2D&) const
+vector<Point2D> Circle::GetIntersection(const Ray2D& ray) const
 {
-	return vector<Point2D>();
+	return Ellipse::GetIntersection(ray);
 }
 
-vector<Point2D> Circle::GetIntersection(const Segment2D&) const
+vector<Point2D> Circle::GetIntersection(const Segment2D& segment) const
 {
-	return vector<Point2D>();
+	return Ellipse::GetIntersection(segment);
 }

@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "line2D.hpp"
 
@@ -25,22 +25,30 @@ Line2D::Line2D()
 Line2D::Line2D(const Ray2D& ray)
 	: Line2D(ray.pos_, *ray.dir_) {}
 
-Line2D::Line2D(const Segment2D& seg)
-{
-	A = seg.b.y - seg.a.y;
-	B = seg.a.x - seg.b.x;
-	C = -A * seg.a.x - B * seg.a.y;
-}
-
 Line2D::Line2D(const Point2D& a, const Point2D& b)
-{
-	A = b.y - a.y;
-	B = a.x - b.x;
-	C = -A * a.x - B * a.y;
-}
+	: A(b.y - a.y), B(a.x - b.x), C(-A * a.x - B * a.y) {}
+
+Line2D::Line2D(const Segment2D& segment)
+	: Line2D(segment.a, segment.b) {}
 
 Line2D::Line2D(const Point2D& point, const Vector2D& direction)
 	: Line2D(point, point + direction) {}
+
+
+double Line2D::GetA() const
+{
+	return A;
+}
+
+double Line2D::GetB() const
+{
+	return B;
+}
+
+double Line2D::GetC() const
+{
+	return C;
+}
 
 double Line2D::PointIntoLine2D(const Point2D& point) const
 {

@@ -1,21 +1,21 @@
-// Splash (c) - open-source C++ library for geometry and linear algebra.
+// SplashGeom (c) - open-source C++ library for geometry and linear algebra.
 // Copyright (c) 2016, Ilya Zakharkin, Elena Kirilenko and Nadezhda Kasimova.
 // All rights reserved.
 /*
-	This file is part of Splash.
+	This file is part of SplashGeom.
 
-	Splash is free software: you can redistribute it and/or modify
+	SplashGeom is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	Splash is distributed in the hope that it will be useful,
+	SplashGeom is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with Splash. If not, see <http://www.gnu.org/licenses/>.
+	along with SplashGeom. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "voronoi2D.hpp"
 
@@ -51,38 +51,39 @@ DCEL VoronoiDiagram2D::GetDiagramDCEL() const
 Convex2D GetHalfPlanesIntersection(const Point2D& cur_point, const vector<Line2D>& halfplanes, const Rectangle& border_box)
 {
 	if (halfplanes.size() == 1) {
-		return border_box.GetIntersectionalConvex2D(cur_point, halfplanes[0]);
+		Convex2D cur_convex(border_box.GetIntersectionalConvex2D(cur_point, halfplanes[0]));
+		return cur_convex;
 	} else {
 		int middle = halfplanes.size() >> 1;
 		vector<Line2D> first_half(halfplanes.begin(), halfplanes.begin() + middle);
 		vector<Line2D> second_half(halfplanes.begin() + middle, halfplanes.end());
-		Convex2D first_convex = GetHalfPlanesIntersection(cur_point, first_half, border_box);
-		Convex2D second_convex = GetHalfPlanesIntersection(cur_point, second_half, border_box);
+		Convex2D first_convex(GetHalfPlanesIntersection(cur_point, first_half, border_box));
+		Convex2D second_convex(GetHalfPlanesIntersection(cur_point, second_half, border_box));
 		return first_convex.GetIntersectionalConvex(second_convex);
 	}
 }
 
-Voronoi2DLocus VoronoiDiagram2D::MakeVoronoi2DLocus(const Point2D& cur_point, const vector<Point2D>& points, const Rectangle& border_box)
+Voronoi2DLocus VoronoiDiagram2D::MakeVoronoi2DLocus(const Point2D& site, const vector<Point2D>& points, const Rectangle& border_box)
 {
 	Voronoi2DLocus cur_locus;
 	vector<Line2D> halfplanes;
-	for (size_t i = 0; i < points.size(); ++i) {
-		if (points[i] != cur_point) {
-			Segment2D cur_seg(cur_point, points[i]);
+	for (auto cur_point : points) {
+		if (cur_point != site) {
+			Segment2D cur_seg(site, cur_point);
 			Line2D cur_halfplane(cur_seg.GetCenter(), cur_seg.NormalVec());
 			halfplanes.push_back(cur_halfplane);
 		}
 	}
-	*cur_locus.region_ = GetHalfPlanesIntersection(cur_point, halfplanes, border_box);
-	cur_locus.site_ = cur_point;
+	*cur_locus.region_ = GetHalfPlanesIntersection(site, halfplanes, border_box);
+	cur_locus.site_ = site;
 	return cur_locus;
 }
 
 VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DHalfPlanes(const vector<Point2D>& points, const Rectangle& border_box)
 {
 	Voronoi2DLocus cur_locus;
-	for (size_t i = 0; i < points.size(); ++i) {
-		cur_locus = MakeVoronoi2DLocus(points[i], points, border_box);
+	for (auto cur_point : points) {
+		cur_locus = MakeVoronoi2DLocus(cur_point, points, border_box);
 		this->diagram_.push_back(cur_locus);
 	}
 	return *this;
@@ -96,12 +97,12 @@ VoronoiDiagram2D VoronoiDiagram2D::MakeVoronoiDiagram2DFortune(const vector<Poin
 	DCEL edges;
 	while (!events_queue.empty()) {
 		cur_event = make_shared<Event>(events_queue.top());
-		const shared_ptr<PointEvent> is_point_event(const_cast<PointEvent *>(dynamic_cast<const PointEvent *>(cur_event.get())));
+		shared_ptr<const PointEvent> is_point_event(dynamic_cast<const PointEvent *>(cur_event.get()));
 		if (is_point_event) {
 			events_queue.pop();
 			beach_line.HandlePointEvent(*is_point_event, border_box, events_queue, edges);
 		} else {
-			const shared_ptr<CircleEvent> is_circle_event(const_cast<CircleEvent *>(dynamic_cast<const CircleEvent *>(cur_event.get())));
+			shared_ptr<const CircleEvent> is_circle_event(dynamic_cast<const CircleEvent *>(cur_event.get()));
 			events_queue.pop();
 			beach_line.HandleCircleEvent(*is_circle_event, border_box, events_queue, edges);
 		}
